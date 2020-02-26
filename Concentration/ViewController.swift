@@ -29,6 +29,8 @@ class ViewController: UIViewController {
     @IBAction func restartGame(_ sender: UIButton) {
         game = Concentration(numberOfPairsOfCards: (cardButtons.count + 1) / 2)
         flipCount = 0
+        emojiChoices = themes[Int(arc4random_uniform(UInt32(themes.count)))]
+        emoji = [Int:String]()
         updateViewFromModel()
     }
 
@@ -50,7 +52,13 @@ class ViewController: UIViewController {
     
     @IBOutlet weak var flipCountLabel: UILabel!
     
-    var emojiChoices = [ "😸", "🐶", "👻", "🎃", "🐽", "🐝", "🚕", "⛴", "🥰" ]
+    
+    var themes: [[String]] = [
+        [ "😸", "🐶", "🐻", "🐨", "🐽", "🐝", "🐧", "🙈", "🦀" ],
+        [ "😃", "😂", "😍", "🤪", "😎", "🧐", "😡", "😵", "🥶" ],
+    ]
+
+    lazy var emojiChoices = themes[Int(arc4random_uniform(UInt32(themes.count)))]
     var emoji = [Int:String]()
     func emoji(for card: Card) -> String {
         if emoji[card.identifier] == nil, emojiChoices.count > 0 {
