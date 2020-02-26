@@ -10,14 +10,8 @@ import UIKit
 
 class ViewController: UIViewController {
     lazy var game = Concentration(numberOfPairsOfCards: (cardButtons.count + 1) / 2)
-    var flipCount = 0 {
-        didSet {
-            flipCountLabel.text = "Flips:\(flipCount)"
-        }
-    }
 
     @IBAction func touchCard(_ sender: UIButton) {
-        flipCount += 1
         if let cardNumber = cardButtons.firstIndex(of: sender) {
             game.chooseCard(at: cardNumber)
             updateViewFromModel()
@@ -28,7 +22,6 @@ class ViewController: UIViewController {
 
     @IBAction func restartGame(_ sender: UIButton) {
         game = Concentration(numberOfPairsOfCards: (cardButtons.count + 1) / 2)
-        flipCount = 0
         emojiChoices = themes[Int(arc4random_uniform(UInt32(themes.count)))]
         emoji = [Int:String]()
         updateViewFromModel()
@@ -46,6 +39,7 @@ class ViewController: UIViewController {
                 button.backgroundColor = card.isMatched ? #colorLiteral(red: 0.9372549057, green: 0.3490196168, blue: 0.1921568662, alpha: 0) : #colorLiteral(red: 1, green: 1, blue: 1, alpha: 0.8470588235)
             }
         }
+        flipCountLabel.text = "Flips:\(game.flipCount)"
     }
     
     @IBOutlet var cardButtons: Array<UIButton>!
