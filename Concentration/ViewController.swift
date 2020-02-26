@@ -15,7 +15,7 @@ class ViewController: UIViewController {
             flipCountLabel.text = "Flips:\(flipCount)"
         }
     }
-    
+
     @IBAction func touchCard(_ sender: UIButton) {
         flipCount += 1
         if let cardNumber = cardButtons.firstIndex(of: sender) {
@@ -25,7 +25,13 @@ class ViewController: UIViewController {
             print("chosen card was not in cardButtons")
         }
     }
-    
+
+    @IBAction func restartGame(_ sender: UIButton) {
+        game = Concentration(numberOfPairsOfCards: (cardButtons.count + 1) / 2)
+        flipCount = 0
+        updateViewFromModel()
+    }
+
     func updateViewFromModel() {
         for index in cardButtons.indices {
             let button = cardButtons[index]
@@ -35,7 +41,7 @@ class ViewController: UIViewController {
                 button.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
             } else {
                 button.setTitle("", for: UIControl.State.normal)
-                button.backgroundColor = card.isMatched ? #colorLiteral(red: 0.9372549057, green: 0.3490196168, blue: 0.1921568662, alpha: 0) : #colorLiteral(red: 0.9372549057, green: 0.3490196168, blue: 0.1921568662, alpha: 1)
+                button.backgroundColor = card.isMatched ? #colorLiteral(red: 0.9372549057, green: 0.3490196168, blue: 0.1921568662, alpha: 0) : #colorLiteral(red: 1, green: 1, blue: 1, alpha: 0.8470588235)
             }
         }
     }
