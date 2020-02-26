@@ -37,6 +37,14 @@ class Concentration {
             let card = Card()
             cards += [card, card]
         }
+        // shuffle the cards
+        for i in stride(from: cards.count - 1, to: 1, by: -1) {
+            for j in 0...i {
+                let temp = cards[i]
+                cards[i] = cards[j]
+                cards[j] = temp
+            }
+        }
         
     }
 }
