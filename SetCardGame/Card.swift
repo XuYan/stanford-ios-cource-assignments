@@ -26,9 +26,18 @@ enum Shading: String, CaseIterable {
     case open = "open"
 }
 
-struct Card {
+struct Card: Equatable, Hashable {
+    let id: Int
     let color: Color
     let number: Int
     let shape: Shape
     let shading: Shading
+    
+    static func ==(lhs: Card, rhs: Card) -> Bool {
+        return lhs.id == rhs.id
+    }
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
 }
