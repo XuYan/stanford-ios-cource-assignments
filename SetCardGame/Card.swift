@@ -8,23 +8,6 @@
 
 import Foundation
 
-enum Color: String, CaseIterable {
-    case red = "red"
-    case green = "green"
-    case blue = "blue"
-}
-
-enum Shape: String, CaseIterable {
-    case diamond = "diamond"
-    case squiggle = "squiggle"
-    case oval = "oval"
-}
-
-enum Shading: String, CaseIterable {
-    case solid = "solid"
-    case striped = "striped"
-    case open = "open"
-}
 
 struct Card: Equatable, Hashable {
     let id: Int
@@ -39,5 +22,23 @@ struct Card: Equatable, Hashable {
     
     func hash(into hasher: inout Hasher) {
         hasher.combine(id)
+    }
+
+    enum Color: String, CaseIterable {
+        case red = "red"
+        case green = "green"
+        case blue = "blue"
+    }
+    
+    enum Shape: String, CaseIterable {
+        case diamond = "diamond"
+        case squiggle = "squiggle"
+        case oval = "oval"
+    }
+    
+    enum Shading: String, CaseIterable {
+        case solid = "solid"
+        case striped = "striped"
+        case open = "open"
     }
 }
