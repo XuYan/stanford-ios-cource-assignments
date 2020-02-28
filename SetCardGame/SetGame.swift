@@ -8,14 +8,19 @@
 
 import Foundation
 
-class SetGame {
+struct SetGame {
     let maxNumberOfCardsOnScreen = 24
-    var idToBeAssigned = 0
-    var cardDeck: [Card] = []
-    var cardsOnScreen: [Card] = []
-    var selectedCards: [Card] = []
+    var idToBeAssigned: Int
+    var cardDeck: [Card]
+    var cardsOnScreen: [Card]
+    var selectedCards: [Card]
     
     init() {
+        cardDeck = []
+        cardsOnScreen = []
+        selectedCards = []
+        idToBeAssigned = 0
+
         for number in 1...3 {
             Card.Color.allCases.forEach {
                 let color = Card.Color(rawValue: $0.rawValue)!
@@ -42,14 +47,14 @@ class SetGame {
         return selectedCards.contains(card)
     }
     
-    func selectCard(card: Card) {
+    mutating func selectCard(card: Card) {
         if isCardSelected(card: card) {
            return
         }
         selectedCards.append(card)
     }
     
-    func unselectCard(card: Card) {
+    mutating func unselectCard(card: Card) {
         if !isCardSelected(card: card) {
             return
         }
@@ -57,13 +62,40 @@ class SetGame {
         selectedCards.remove(at: index)
     }
     
-    func popCardsFromCardDeck(numberOfCards: Int) {
+    mutating func popCardsFromCardDeck(numberOfCards: Int) {
         for _ in 1...numberOfCards {
             cardsOnScreen.append(cardDeck.removeFirst())
         }
     }
     
-    private func generateId() -> Int {
+    func getAMatch() -> Bool? {
+        if selectedCards.count == 3 {
+            let card1 = selectedCards[0]
+            let card2 = selectedCards[1]
+            let card3 = selectedCards[2]
+            return ((card1.color == card2.color && card1.color == card3.color) || (card1.color != card2.color && card1.color != card3.color && card2.color != card3.color))
+            &&
+            ((card1.number == card2.number && card1.number == card3.number) || (card1.number != card2.number && card1.number != card3.number && card2.number != card3.number))
+            &&
+            ((card1.shading == card2.shading && card1.shading == card3.shading) || (card1.shading != card2.shading && card1.shading != card3.shading && card2.shading != card3.shading))
+            &&
+            ((card1.shape == card2.shape && card1.shape == card3.shape) || (card1.shape != card2.shape && card1.shape != card3.shape && card2.shape != card3.shape))
+        }
+        return nil
+    }
+    
+    mutating func clearSelectedCards() {
+        selectedCards = []
+    }
+    
+    mutating func replaceMatchingCards() {
+        cardsOnScreen.removeAll(where: { selectedCards.contains($0) })
+        if cardDeck.count > 0 {
+            popCardsFromCardDeck(numberOfCards: 3)
+        }
+    }
+    
+    mutating private func generateId() -> Int {
         let id = idToBeAssigned
         idToBeAssigned += 1
         return id

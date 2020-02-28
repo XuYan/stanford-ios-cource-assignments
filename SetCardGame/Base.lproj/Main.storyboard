@@ -151,14 +151,6 @@
                                     <action selector="touchCard:" destination="BYZ-38-t0r" eventType="touchUpInside" id="otN-IP-cTO"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rXY-ZF-Bmu">
-                                <rect key="frame" x="130" y="484" width="73" height="102"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <connections>
-                                    <action selector="touchCard:" destination="BYZ-38-t0r" eventType="touchUpInside" id="PcE-DH-O1C"/>
-                                </connections>
-                            </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="egd-s7-uST">
                                 <rect key="frame" x="211" y="484" width="73" height="102"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -231,8 +223,15 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="25"/>
                                 <state key="normal" title="Restart"/>
                                 <connections>
-                                    <action selector="addMoreCards:" destination="BYZ-38-t0r" eventType="touchUpInside" id="8eR-oj-L7a"/>
                                     <action selector="restart:" destination="BYZ-38-t0r" eventType="touchUpInside" id="NaD-aa-KJh"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rXY-ZF-Bmu">
+                                <rect key="frame" x="130" y="484" width="73" height="102"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <connections>
+                                    <action selector="touchCard:" destination="BYZ-38-t0r" eventType="touchUpInside" id="PcE-DH-O1C"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -240,6 +239,7 @@
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <connections>
+                        <outlet property="moreCardsButton" destination="nwK-NS-rjI" id="J6x-Fr-ky9"/>
                         <outletCollection property="cardCollection" destination="O6L-Cv-kfQ" collectionClass="NSMutableArray" id="mhn-J8-nSU"/>
                         <outletCollection property="cardCollection" destination="A62-Rc-kj6" collectionClass="NSMutableArray" id="Nzl-ca-nJ1"/>
                         <outletCollection property="cardCollection" destination="5Np-7x-JOc" collectionClass="NSMutableArray" id="FZZ-bP-39Z"/>
