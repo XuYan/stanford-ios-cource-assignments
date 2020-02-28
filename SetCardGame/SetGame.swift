@@ -17,12 +17,12 @@ class SetGame {
     
     init() {
         for number in 1...3 {
-            Color.allCases.forEach {
-                let color = Color(rawValue: $0.rawValue)!
-                Shape.allCases.forEach {
-                    let shape = Shape(rawValue: $0.rawValue)!
-                    Shading.allCases.forEach {
-                        let shading = Shading(rawValue: $0.rawValue)!
+            Card.Color.allCases.forEach {
+                let color = Card.Color(rawValue: $0.rawValue)!
+                Card.Shape.allCases.forEach {
+                    let shape = Card.Shape(rawValue: $0.rawValue)!
+                    Card.Shading.allCases.forEach {
+                        let shading = Card.Shading(rawValue: $0.rawValue)!
                         cardDeck.append(Card(id: generateId(),color: color, number: number, shape: shape, shading: shading))
                     }
                 }
