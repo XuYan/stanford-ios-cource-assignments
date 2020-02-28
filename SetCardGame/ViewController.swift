@@ -15,19 +15,13 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        for i in 0..<game.cardsOnScreen.count {
-            let card = game.cardsOnScreen[i]
-            let cardButton = cardCollection[i]
-            cardButtonByCard[card] = cardButton
-            cardByCardButton[cardButton] = card
-
-            drawCard(cardButton: cardButton, card: card)
-        }
+        updateViewFromModel()
     }
     
     private func drawCard(cardButton: UIButton, card: Card) {
         cardButton.backgroundColor = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)
         let attributes: [NSAttributedString.Key:Any] = [
+            .font: UIFont.systemFont(ofSize: 72),
             .strokeWidth : getStrokeWidth(card: card),
             .foregroundColor : getForegroundColor(card: card),
             .strokeColor : getStrokeColor(card: card)
@@ -92,10 +86,22 @@ class ViewController: UIViewController {
     }
     
     @IBAction func addMoreCards(_ sender: UIButton) {
-        
+        game.popCardsFromCardDeck(numberOfCards: 3)
+        updateViewFromModel()
     }
 
     @IBAction func restart(_ sender: UIButton) {
+    }
+    
+    private func updateViewFromModel() {
+        for i in 0..<game.cardsOnScreen.count {
+            let card = game.cardsOnScreen[i]
+            let cardButton = cardCollection[i]
+            cardButtonByCard[card] = cardButton
+            cardByCardButton[cardButton] = card
+            
+            drawCard(cardButton: cardButton, card: card)
+        }
     }
 }
 

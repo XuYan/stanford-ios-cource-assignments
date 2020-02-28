@@ -29,9 +29,7 @@ class SetGame {
             }
         }
         
-        for _ in 1...12 {
-            cardsOnScreen.append(cardDeck.removeFirst())
-        }
+        popCardsFromCardDeck(numberOfCards: 12)
     }
     
     func isCardOnScreen(id: Int) -> Bool {
@@ -59,7 +57,13 @@ class SetGame {
         selectedCards.remove(at: index)
     }
     
-    func generateId() -> Int {
+    func popCardsFromCardDeck(numberOfCards: Int) {
+        for _ in 1...numberOfCards {
+            cardsOnScreen.append(cardDeck.removeFirst())
+        }
+    }
+    
+    private func generateId() -> Int {
         let id = idToBeAssigned
         idToBeAssigned += 1
         return id
