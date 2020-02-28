@@ -88,6 +88,10 @@ class ViewController: UIViewController {
     @IBAction func addMoreCards(_ sender: UIButton) {
         game.popCardsFromCardDeck(numberOfCards: 3)
         updateViewFromModel()
+        
+        if !hasMoreCardToAdd() {
+            sender.isEnabled = false
+        }
     }
 
     @IBAction func restart(_ sender: UIButton) {
@@ -102,6 +106,10 @@ class ViewController: UIViewController {
             
             drawCard(cardButton: cardButton, card: card)
         }
+    }
+    
+    private func hasMoreCardToAdd() -> Bool {
+        return game.cardDeck.count > 0 && cardButtonByCard.count < game.maxNumberOfCardsOnScreen
     }
 }
 
