@@ -31,12 +31,9 @@ struct Card: Equatable, Hashable {
     }
     
     enum Shape: String, CaseIterable {
-//        case diamond = "diamond"
-//        case squiggle = "squiggle"
-//        case oval = "oval"
-        case triangle = "▲"
-        case circle = "●"
-        case square = "■"
+        case diamond = "diamond"
+        case squiggle = "squiggle"
+        case oval = "oval"
     }
     
     enum Shading: String, CaseIterable {
