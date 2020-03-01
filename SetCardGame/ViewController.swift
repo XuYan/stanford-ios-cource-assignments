@@ -116,7 +116,7 @@ class ViewController: UIViewController {
         game.popCardsFromCardDeck(numberOfCards: 3)
         updateViewFromModel()
         
-        if !hasMoreCardToAdd() {
+        if game.cardDeck.count == 0 {
             moreCardsButton.isEnabled = false
         }
     }
@@ -143,9 +143,5 @@ class ViewController: UIViewController {
             setSelectionState(cardButton: cardCollection[i], selectionState: false)
             cardCollection[i].setAttributedTitle(NSAttributedString(), for: UIControl.State.normal)
         }
-    }
-    
-    private func hasMoreCardToAdd() -> Bool {
-        return game.cardDeck.count > 0 && game.cardsOnScreen.count < game.maxNumberOfCardsOnScreen
     }
 }
