@@ -44,11 +44,12 @@ class PlayingCard: UIView {
     
     private func createDiamondPath() -> UIBezierPath {
         let path = UIBezierPath()
-        path.move(to: CGPoint(x: 50, y: 100))
-        path.addLine(to: CGPoint(x: 100, y: 75))
-        path.addLine(to: CGPoint(x: 150, y: 100))
-        path.addLine(to: CGPoint(x: 100, y: 125))
-        path.addLine(to: CGPoint(x: 50, y: 100))
+        let startPoint = CGPoint(x: (bounds.width - shapeWidth) / 2, y: bounds.height / 2)
+        path.move(to: startPoint)
+        path.addLine(to: CGPoint(x: startPoint.x + shapeWidth / 2, y: startPoint.y - shapeHeight / 2))
+        path.addLine(to: CGPoint(x: startPoint.x + shapeWidth, y: startPoint.y))
+        path.addLine(to: CGPoint(x: startPoint.x + shapeWidth / 2, y: startPoint.y + shapeHeight / 2))
+        path.close()
         path.addClip()
         return path
     }
@@ -91,12 +92,33 @@ class PlayingCard: UIView {
     }
     
     private func setShading(_ path: UIBezierPath) -> UIBezierPath {
-        
+        if shading == "open" {
+            
+        } else if shading == "stripe" {
+            
+        } else {
+            
+        }
         return path
     }
     
     private func setNumber(_ path: UIBezierPath) -> UIBezierPath {
         
         return path
+    }
+}
+
+extension PlayingCard {
+    private struct SizeRatio {
+        static let ShapeWidthToBoundsWidth: CGFloat = 0.5
+        static let ShapeHeightToBoundsHeight: CGFloat = 0.5
+    }
+    
+    private var shapeWidth: CGFloat {
+        return bounds.width * SizeRatio.ShapeWidthToBoundsWidth
+    }
+    
+    private var shapeHeight: CGFloat {
+        return bounds.height * SizeRatio.ShapeHeightToBoundsHeight
     }
 }
