@@ -80,24 +80,27 @@ class PlayingCard: UIView {
     }
     
     private func setColor(_ path: UIBezierPath) -> UIBezierPath {
+        let drawColor: UIColor
         if color == "red" {
-            UIColor.red.setFill()
+            drawColor = UIColor.red
         } else if color == "green" {
-            UIColor.green.setFill()
+            drawColor = UIColor.green
         } else {
-            UIColor.purple.setFill()
+            drawColor = UIColor.purple
         }
-        path.fill()
+        drawColor.setFill()
+        drawColor.setStroke()
         return path
     }
     
     private func setShading(_ path: UIBezierPath) -> UIBezierPath {
         if shading == "open" {
-            
+            path.stroke()
         } else if shading == "stripe" {
-            
+            drawStripe()
+            path.stroke()
         } else {
-            
+            path.fill()
         }
         return path
     }
@@ -106,12 +109,24 @@ class PlayingCard: UIView {
         
         return path
     }
+    
+    private func drawStripe() {
+        let stripePath = UIBezierPath()
+        var x: CGFloat = 0
+        while x < bounds.width {
+            stripePath.move(to: CGPoint(x: x, y: 0))
+            stripePath.addLine(to: CGPoint(x: x, y: bounds.height))
+            x += stripeGap
+        }
+        stripePath.stroke()
+    }
 }
 
 extension PlayingCard {
     private struct SizeRatio {
         static let ShapeWidthToBoundsWidth: CGFloat = 0.5
         static let ShapeHeightToBoundsHeight: CGFloat = 0.5
+        static let stripeGapToBoundsWidth: CGFloat = 0.02
     }
     
     private var shapeWidth: CGFloat {
@@ -120,5 +135,9 @@ extension PlayingCard {
     
     private var shapeHeight: CGFloat {
         return bounds.height * SizeRatio.ShapeHeightToBoundsHeight
+    }
+    
+    private var stripeGap: CGFloat {
+        return bounds.width * SizeRatio.stripeGapToBoundsWidth
     }
 }
