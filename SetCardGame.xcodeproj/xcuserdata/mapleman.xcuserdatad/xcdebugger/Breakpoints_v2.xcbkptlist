@@ -3,4 +3,54 @@
    uuid = "4D341843-94EF-4460-9008-D2579D186072"
    type = "1"
    version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "41B5F293-C219-4DD6-A5D0-B0A5B13499A8"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "SetCardGame/Card.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "33"
+            endingLineNumber = "33"
+            landmarkName = "Shape"
+            landmarkType = "13">
+            <Locations>
+               <Location
+                  uuid = "41B5F293-C219-4DD6-A5D0-B0A5B13499A8 - 4cf00d9297741fc8"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "SetCardGame.Card.Shape.init(rawValue: Swift.String) -&gt; Swift.Optional&lt;SetCardGame.Card.Shape&gt;"
+                  moduleName = "SetCardGame"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/mapleman/Projects/stanford-ios-course-assignments/SetCardGame/Card.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "34"
+                  endingLineNumber = "34"
+                  offsetFromSymbolStart = "64">
+               </Location>
+               <Location
+                  uuid = "41B5F293-C219-4DD6-A5D0-B0A5B13499A8 - 90d58a801b2884e9"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "SetCardGame.Card.Shape.rawValue.getter : Swift.String"
+                  moduleName = "SetCardGame"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/mapleman/Projects/stanford-ios-course-assignments/SetCardGame/Card.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "34"
+                  endingLineNumber = "34"
+                  offsetFromSymbolStart = "53">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
 </Bucket>
