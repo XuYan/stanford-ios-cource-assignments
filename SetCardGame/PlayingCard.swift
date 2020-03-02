@@ -37,7 +37,8 @@ class PlayingCard: UIView {
     }
     
     private func createOvalPath() -> UIBezierPath {
-        let path = UIBezierPath(ovalIn: bounds)
+        let rect = CGRect(x: (bounds.width - shapeWidth) / 2, y: (bounds.height - shapeHeight) / 2, width: shapeWidth, height: shapeHeight)
+        let path = UIBezierPath(ovalIn: rect)
         path.addClip()
         return path
     }

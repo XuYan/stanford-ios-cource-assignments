@@ -88,7 +88,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SDq-2f-wwu">
-                                <rect key="frame" x="130" y="264" width="73" height="102"/>
+                                <rect key="frame" x="139" y="282" width="73" height="102"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <connections>
@@ -235,7 +235,7 @@
                                 </connections>
                             </button>
                             <view contentMode="redraw" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gxj-gg-4ag" customClass="PlayingCard" customModule="SetCardGame" customModuleProvider="target">
-                                <rect key="frame" x="20" y="44" width="209" height="352"/>
+                                <rect key="frame" x="29" y="94" width="183" height="324"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <userDefinedRuntimeAttributes>
@@ -243,7 +243,7 @@
                                         <integer key="value" value="0"/>
                                     </userDefinedRuntimeAttribute>
                                     <userDefinedRuntimeAttribute type="string" keyPath="color" value="red"/>
-                                    <userDefinedRuntimeAttribute type="string" keyPath="shape" value="diamond"/>
+                                    <userDefinedRuntimeAttribute type="string" keyPath="shape" value="oval"/>
                                     <userDefinedRuntimeAttribute type="string" keyPath="shading" value="stripe"/>
                                 </userDefinedRuntimeAttributes>
                             </view>
