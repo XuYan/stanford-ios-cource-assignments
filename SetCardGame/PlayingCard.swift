@@ -119,7 +119,7 @@ extension PlayingCard {
     private struct SizeRatio {
         static let ShapeWidthToBoundsWidth: CGFloat = 0.3
         static let ShapeHeightToBoundsHeight: CGFloat = 0.5
-        static let stripeGapToBoundsWidth: CGFloat = 0.02
+        static let stripeGapToBoundsWidth: CGFloat = 0.05
         static let curveToShapeWidth: CGFloat = 0.35
         static let gapBetweenShapesToWidth: CGFloat = 0.025
     }
