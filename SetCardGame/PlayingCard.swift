@@ -11,76 +11,74 @@ import UIKit
 @IBDesignable
 class PlayingCard: UIView {
     @IBInspectable
-    var color: String = "" { didSet { setNeedsDisplay(); setNeedsLayout() } }
+    var color: String = "red" { didSet { setNeedsDisplay(); setNeedsLayout() } }
     
     @IBInspectable
-    var shape: String = "" { didSet { setNeedsDisplay(); setNeedsLayout() } }
+    var shape: String = "diamond" { didSet { setNeedsDisplay(); setNeedsLayout() } }
 
     @IBInspectable
-    var shading: String = "" { didSet { setNeedsDisplay(); setNeedsLayout() } }
+    var shading: String = "open" { didSet { setNeedsDisplay(); setNeedsLayout() } }
 
     @IBInspectable
-    var number: Int = 1 { didSet { setNeedsDisplay(); setNeedsLayout() } }
+    var number: Int = 2 { didSet { setNeedsDisplay(); setNeedsLayout() } }
     
     override func draw(_ rect: CGRect) {
-        setNumber(setShading(setColor(createPath())))
+        let path = UIBezierPath()
+        setColor()
+        for i in 1...number {
+            createPath(path, i)
+        }
+        path.addClip()
+        setShading(path)
     }
     
-    private func createPath() -> UIBezierPath {
+    private func createPath(_ path: UIBezierPath, _ index: Int) -> UIBezierPath {
         if shape == "oval" {
-            return createOvalPath()
+            return createOvalPath(path, index)
         } else if shape == "diamond" {
-            return createDiamondPath()
+            return createDiamondPath(path, index)
         } else {
-            return createSquigglePath()
+            return createSquigglePath(path, index)
         }
     }
     
-    private func createOvalPath() -> UIBezierPath {
-        let rect = CGRect(x: (bounds.width - shapeWidth) / 2, y: (bounds.height - shapeHeight) / 2, width: shapeWidth, height: shapeHeight)
-        let path = UIBezierPath(ovalIn: rect)
-        path.addClip()
+    private func createOvalPath(_ path: UIBezierPath, _ index: Int) -> UIBezierPath {
+        let startPointX = (bounds.width - totalShapeWidth) / 2
+        let offsetX = CGFloat(index - 1) * (shapeWidth + gapBetweenShapes)
+        let startPointY = (bounds.height - shapeHeight) / 2
+        let rect = CGRect(x: startPointX + offsetX, y: startPointY, width: shapeWidth, height: shapeHeight)
+        path.append(UIBezierPath(ovalIn: rect))
         return path
     }
     
-    private func createDiamondPath() -> UIBezierPath {
-        let path = UIBezierPath()
-        let startPoint = CGPoint(x: (bounds.width - shapeWidth) / 2, y: bounds.height / 2)
+    private func createDiamondPath(_ path: UIBezierPath, _ index: Int) -> UIBezierPath {
+        let startPointX = (bounds.width - totalShapeWidth) / 2
+        let offsetX = CGFloat(index - 1) * (shapeWidth + gapBetweenShapes)
+        let startPoint = CGPoint(x: startPointX + offsetX, y: bounds.height / 2)
         path.move(to: startPoint)
         path.addLine(to: CGPoint(x: startPoint.x + shapeWidth / 2, y: startPoint.y - shapeHeight / 2))
         path.addLine(to: CGPoint(x: startPoint.x + shapeWidth, y: startPoint.y))
         path.addLine(to: CGPoint(x: startPoint.x + shapeWidth / 2, y: startPoint.y + shapeHeight / 2))
-        path.close()
-        path.addClip()
+        path.addLine(to: startPoint)
         return path
     }
     
-    private func createSquigglePath() -> UIBezierPath {
-        let startPoint = CGPoint(x: 123, y: 233)
-        let curves = [ // cp1, cp2, to
-            (CGPoint(x:  118, y: 197), CGPoint(x: 148, y: 167), CGPoint(x: 180, y: 181)),
-            (CGPoint(x:  212, y: 195), CGPoint(x: 193, y: 230), CGPoint(x: 243, y: 229)),
-            (CGPoint(x:  293, y: 228), CGPoint(x: 334, y: 182), CGPoint(x: 372, y: 175)),
-            (CGPoint(x:  393, y: 171), CGPoint(x: 417, y: 183), CGPoint(x: 418, y: 214)),
-            (CGPoint(x:  419, y: 243), CGPoint(x: 415, y: 296), CGPoint(x: 377, y: 309)),
-            (CGPoint(x:  363, y: 314), CGPoint(x: 333, y: 301), CGPoint(x: 311, y: 283)),
-            (CGPoint(x:  287, y: 263), CGPoint(x: 213, y: 303), CGPoint(x: 178, y: 300)),
-            (CGPoint(x: 163, y: 299), CGPoint(x: 113, y: 257), CGPoint(x: 123, y: 233))
-        ]
-
-        // Draw the squiggle
-        let path = UIBezierPath()
+    private func createSquigglePath(_ path: UIBezierPath, _ index: Int) -> UIBezierPath {
+        let startPointX = (bounds.width - totalShapeWidth) / 2
+        let offsetX = CGFloat(index - 1) * (shapeWidth + gapBetweenShapes)
+        let startPoint = CGPoint(x: startPointX + offsetX, y: (bounds.height - shapeHeight) / 2)
         path.move(to: startPoint)
-        for (cp1, cp2, to) in curves {
-            path.addCurve(to: to, controlPoint1: cp1, controlPoint2: cp2)
-        }
-        path.close()
-        // Your code to scale, rotate and translate the squiggle
+        path.addCurve(to: CGPoint(x: startPoint.x, y: startPoint.y + shapeHeight), controlPoint1: CGPoint(x: startPoint.x + curve, y: startPoint.y + shapeHeight / 3), controlPoint2: CGPoint(x: startPoint.x - curve, y: startPoint.y + shapeHeight / 3 * 2))
+        path.addLine(to: CGPoint(x: startPoint.x + shapeWidth, y: startPoint.y + shapeHeight))
+        path.addCurve(to: CGPoint(x: startPoint.x + shapeWidth, y: startPoint.y),
+                      controlPoint1: CGPoint(x: startPoint.x + shapeWidth - curve, y: startPoint.y + (shapeHeight / 3) * 2),
+                      controlPoint2: CGPoint(x: startPoint.x + shapeWidth + curve, y: startPoint.y + shapeHeight / 3))
+        path.addLine(to: CGPoint(x: startPoint.x, y: startPoint.y))
 
         return path
     }
     
-    private func setColor(_ path: UIBezierPath) -> UIBezierPath {
+    private func setColor() {
         let drawColor: UIColor
         if color == "red" {
             drawColor = UIColor.red
@@ -91,7 +89,6 @@ class PlayingCard: UIView {
         }
         drawColor.setFill()
         drawColor.setStroke()
-        return path
     }
     
     private func setShading(_ path: UIBezierPath) -> UIBezierPath {
@@ -103,11 +100,6 @@ class PlayingCard: UIView {
         } else {
             path.fill()
         }
-        return path
-    }
-    
-    private func setNumber(_ path: UIBezierPath) -> UIBezierPath {
-        
         return path
     }
     
@@ -125,9 +117,11 @@ class PlayingCard: UIView {
 
 extension PlayingCard {
     private struct SizeRatio {
-        static let ShapeWidthToBoundsWidth: CGFloat = 0.5
+        static let ShapeWidthToBoundsWidth: CGFloat = 0.3
         static let ShapeHeightToBoundsHeight: CGFloat = 0.5
         static let stripeGapToBoundsWidth: CGFloat = 0.02
+        static let curveToShapeWidth: CGFloat = 0.35
+        static let gapBetweenShapesToWidth: CGFloat = 0.025
     }
     
     private var shapeWidth: CGFloat {
@@ -141,4 +135,18 @@ extension PlayingCard {
     private var stripeGap: CGFloat {
         return bounds.width * SizeRatio.stripeGapToBoundsWidth
     }
+    
+    private var curve: CGFloat {
+        return shapeWidth * SizeRatio.curveToShapeWidth
+    }
+    
+    private var gapBetweenShapes: CGFloat {
+        return shapeWidth * SizeRatio.gapBetweenShapesToWidth
+    }
+    
+    private var totalShapeWidth: CGFloat {
+        return CGFloat(number) * shapeWidth + CGFloat(number - 1) * gapBetweenShapes
+    }
 }
+
+

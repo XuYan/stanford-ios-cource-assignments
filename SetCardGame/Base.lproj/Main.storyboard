@@ -235,16 +235,16 @@
                                 </connections>
                             </button>
                             <view contentMode="redraw" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gxj-gg-4ag" customClass="PlayingCard" customModule="SetCardGame" customModuleProvider="target">
-                                <rect key="frame" x="29" y="94" width="183" height="324"/>
+                                <rect key="frame" x="118" y="154" width="208" height="327"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="number" keyPath="number">
-                                        <integer key="value" value="0"/>
+                                        <integer key="value" value="1"/>
                                     </userDefinedRuntimeAttribute>
-                                    <userDefinedRuntimeAttribute type="string" keyPath="color" value="red"/>
                                     <userDefinedRuntimeAttribute type="string" keyPath="shape" value="oval"/>
                                     <userDefinedRuntimeAttribute type="string" keyPath="shading" value="stripe"/>
+                                    <userDefinedRuntimeAttribute type="string" keyPath="color" value="purple"/>
                                 </userDefinedRuntimeAttributes>
                             </view>
                         </subviews>
