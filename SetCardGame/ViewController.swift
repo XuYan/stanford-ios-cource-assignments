@@ -54,21 +54,25 @@ class ViewController: UIViewController {
     private func setSelectionState(playingCard: PlayingCard, selectionState: Bool) {
         if selectionState {
             playingCard.layer.borderWidth = 3.0
-            playingCard.layer.borderColor = UIColor.blue.cgColor
+            playingCard.layer.borderColor = UIColor.black.cgColor
             playingCard.layer.cornerRadius = 8.0
         } else {
             playingCard.layer.borderWidth = 0.0
-            playingCard.layer.borderColor = UIColor.white.cgColor
+            playingCard.layer.borderColor = UIColor.black.cgColor
             playingCard.layer.cornerRadius = 0.0
         }
     }
     
     private func setBackground(playingCard: PlayingCard, card: Card) {
         let matching = game.getAMatch()
-        if matching == nil || !game.isCardSelected(card: card) {
-            playingCard.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
+        if matching == nil {
+            playingCard.backgroundColor = game.isCardSelected(card: card) ? #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1) : #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
         } else {
-            playingCard.backgroundColor = matching! ? #colorLiteral(red: 0.4666666687, green: 0.7647058964, blue: 0.2666666806, alpha: 1) : #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1)
+            if (!game.isCardSelected(card: card)) {
+                playingCard.backgroundColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+            } else {
+                playingCard.backgroundColor = matching! ? #colorLiteral(red: 0.4666666687, green: 0.7647058964, blue: 0.2666666806, alpha: 1) : #colorLiteral(red: 0.5725490451, green: 0, blue: 0.2313725501, alpha: 1)
+            }
         }
     }
     
