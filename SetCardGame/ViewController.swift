@@ -32,24 +32,24 @@ class ViewController: UIViewController {
 
     @IBOutlet weak var moreCardsButton: UIButton!
 
-//    @IBAction func touchCard(_ sender: UIButton) {
-//        let matching = game.getAMatch()
-//        if matching != nil {
-//            if matching! {
-//                game.replaceMatchingCards()
-//            }
-//            game.clearSelectedCards()
-//        } else {
-//            if let touchCard = cardModelByView[sender] {
-//                if game.isCardSelected(card: touchCard) {
-//                    game.unselectCard(card: touchCard)
-//                } else {
-//                    game.selectCard(card: touchCard)
-//                }
-//            }
-//        }
-//        updateViewFromModel()
-//    }
+    @objc func touchCard(_ sender: UIGestureRecognizer) {
+        let matching = game.getAMatch()
+        if matching != nil {
+            if matching! {
+                game.replaceMatchingCards()
+            }
+            game.clearSelectedCards()
+        } else {
+            if let touchCard = cardModelByView[sender.view as! PlayingCard] {
+                if game.isCardSelected(card: touchCard) {
+                    game.unselectCard(card: touchCard)
+                } else {
+                    game.selectCard(card: touchCard)
+                }
+            }
+        }
+        updateViewFromModel()
+    }
     
     private func setSelectionState(playingCard: PlayingCard, selectionState: Bool) {
         if selectionState {
@@ -99,6 +99,12 @@ class ViewController: UIViewController {
             cardModelByView[playingCard] = card
 
             drawCard(playingCard: playingCard, card: card)
+            addTapGesture(to: playingCard)
         }
+    }
+    
+    private func addTapGesture(to: PlayingCard) {
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(touchCard(_:)))
+        to.addGestureRecognizer(tapGestureRecognizer)
     }
 }
