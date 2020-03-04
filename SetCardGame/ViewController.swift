@@ -25,6 +25,8 @@ class ViewController: UIViewController {
     private func drawCard(playingCard: PlayingCard, card: Card) {
         setBackground(playingCard: playingCard, card: card)
         setSelectionState(playingCard: playingCard, selectionState: game.isCardSelected(card: card))
+        playingCard.layer.borderWidth = 2
+        playingCard.layer.borderColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
         cardsContainer.addSubview(playingCard)
     }
 

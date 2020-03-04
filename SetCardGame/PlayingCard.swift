@@ -28,9 +28,6 @@ class PlayingCard: UIView {
         self.shape = shape
         self.shading = shading
         self.number = number
-        
-        self.layer.borderWidth = 1
-        self.layer.borderColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
     }
     
     required init?(coder aDecoder: NSCoder) {
