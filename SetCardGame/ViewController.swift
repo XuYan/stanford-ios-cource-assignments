@@ -20,6 +20,7 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         grid.frame = cardsContainer.bounds
         addSwipeGesture(to: cardsContainer)
+        addRotationGesture(to: cardsContainer)
         updateViewFromModel()
     }
     
@@ -121,5 +122,15 @@ class ViewController: UIViewController {
     
     @objc func swipeDown(_ sender: UIGestureRecognizer) {
         addMoreCards(UIButton())
+    }
+    
+    private func addRotationGesture(to: UIView) {
+        let rotationGestureRecognizer = UIRotationGestureRecognizer(target: self, action: #selector(rotatePiece(_:)))
+        to.addGestureRecognizer(rotationGestureRecognizer)
+    }
+    
+    @objc func rotatePiece(_ sender: UIGestureRecognizer) {
+        game.shuffle()
+        updateViewFromModel()
     }
 }

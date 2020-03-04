@@ -95,6 +95,23 @@ struct SetGame {
         }
     }
     
+    mutating func shuffle() {
+        let countOnScreen = cardsOnScreen.count
+        cardDeck = cardDeck + cardsOnScreen
+        for i in stride(from: cardDeck.count - 1, to: 1, by: -1) {
+            for j in 0...i {
+                let temp = cardDeck[i]
+                cardDeck[i] = cardDeck[j]
+                cardDeck[j] = temp
+            }
+        }
+        cardsOnScreen = []
+        for _ in 1...countOnScreen {
+            cardsOnScreen.append(cardDeck.removeFirst())
+        }
+        selectedCards = []
+    }
+    
     mutating private func generateId() -> Int {
         let id = idToBeAssigned
         idToBeAssigned += 1
