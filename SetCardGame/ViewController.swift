@@ -19,6 +19,7 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         grid.frame = cardsContainer.bounds
+        addSwipeGesture(to: cardsContainer)
         updateViewFromModel()
     }
     
@@ -110,5 +111,15 @@ class ViewController: UIViewController {
     private func addTapGesture(to: PlayingCard) {
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(touchCard(_:)))
         to.addGestureRecognizer(tapGestureRecognizer)
+    }
+    
+    private func addSwipeGesture(to: UIView) {
+        let swipeGestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(swipeDown(_:)))
+        swipeGestureRecognizer.direction = .down
+        to.addGestureRecognizer(swipeGestureRecognizer)
+    }
+    
+    @objc func swipeDown(_ sender: UIGestureRecognizer) {
+        addMoreCards(UIButton())
     }
 }
