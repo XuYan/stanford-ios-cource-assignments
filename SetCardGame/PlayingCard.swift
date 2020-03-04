@@ -11,16 +11,31 @@ import UIKit
 @IBDesignable
 class PlayingCard: UIView {
     @IBInspectable
-    var color: String = "red" { didSet { setNeedsDisplay(); setNeedsLayout() } }
+    var color = "red" { didSet { setNeedsDisplay(); setNeedsLayout() } }
     
     @IBInspectable
-    var shape: String = "diamond" { didSet { setNeedsDisplay(); setNeedsLayout() } }
+    var shape = "diamond" { didSet { setNeedsDisplay(); setNeedsLayout() } }
 
     @IBInspectable
-    var shading: String = "open" { didSet { setNeedsDisplay(); setNeedsLayout() } }
+    var shading = "open" { didSet { setNeedsDisplay(); setNeedsLayout() } }
 
     @IBInspectable
-    var number: Int = 2 { didSet { setNeedsDisplay(); setNeedsLayout() } }
+    var number = 2 { didSet { setNeedsDisplay(); setNeedsLayout() } }
+    
+    init(frame: CGRect, color: String, shape: String, shading: String, number: Int) {
+        super.init(frame: frame)
+        self.color = color
+        self.shape = shape
+        self.shading = shading
+        self.number = number
+        
+        self.layer.borderWidth = 1
+        self.layer.borderColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
     
     override func draw(_ rect: CGRect) {
         let path = UIBezierPath()
