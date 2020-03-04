@@ -34,6 +34,7 @@ struct SetGame {
             }
         }
         
+        shuffle()
         popCardsFromCardDeck(numberOfCards: 12)
     }
     
@@ -99,15 +100,16 @@ struct SetGame {
         let countOnScreen = cardsOnScreen.count
         cardDeck = cardDeck + cardsOnScreen
         for i in stride(from: cardDeck.count - 1, to: 1, by: -1) {
-            for j in 0...i {
-                let temp = cardDeck[i]
-                cardDeck[i] = cardDeck[j]
-                cardDeck[j] = temp
-            }
+            let j = Int.random(in: 0...i)
+            let temp = cardDeck[i]
+            cardDeck[i] = cardDeck[j]
+            cardDeck[j] = temp
         }
         cardsOnScreen = []
-        for _ in 1...countOnScreen {
-            cardsOnScreen.append(cardDeck.removeFirst())
+        if countOnScreen > 1 {
+            for _ in 1...countOnScreen {
+                cardsOnScreen.append(cardDeck.removeFirst())
+            }
         }
         selectedCards = []
     }
