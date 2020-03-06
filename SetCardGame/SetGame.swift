@@ -44,19 +44,19 @@ struct SetGame {
         }
     }
     
-    func isCardSelected(card: Card) -> Bool {
+    func isCardSelected(_ card: Card) -> Bool {
         return selectedCards.contains(card)
     }
     
-    mutating func selectCard(card: Card) {
-        if isCardSelected(card: card) {
+    mutating func selectCard(_ card: Card) {
+        if isCardSelected(card) {
            return
         }
         selectedCards.append(card)
     }
     
-    mutating func unselectCard(card: Card) {
-        if !isCardSelected(card: card) {
+    mutating func unselectCard(_ card: Card) {
+        if !isCardSelected(card) {
             return
         }
         let index = selectedCards.firstIndex(of: card)!

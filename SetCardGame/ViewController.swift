@@ -26,7 +26,7 @@ class ViewController: UIViewController {
     
     private func drawCard(playingCard: PlayingCard, card: Card) {
         setBackground(playingCard: playingCard, card: card)
-        setSelectionState(playingCard: playingCard, selectionState: game.isCardSelected(card: card))
+        setSelectionState(playingCard: playingCard, selectionState: game.isCardSelected(card))
         playingCard.layer.borderWidth = 2
         playingCard.layer.borderColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
         cardsContainer.addSubview(playingCard)
@@ -42,11 +42,11 @@ class ViewController: UIViewController {
             }
             game.clearSelectedCards()
         } else {
-            if let touchCard = cardModelByView[sender.view as! PlayingCard] {
-                if game.isCardSelected(card: touchCard) {
-                    game.unselectCard(card: touchCard)
+            if let cardModel = cardModelByView[sender.view as! PlayingCard] {
+                if game.isCardSelected(cardModel) {
+                    game.unselectCard(cardModel)
                 } else {
-                    game.selectCard(card: touchCard)
+                    game.selectCard(cardModel)
                 }
             }
         }
@@ -68,9 +68,9 @@ class ViewController: UIViewController {
     private func setBackground(playingCard: PlayingCard, card: Card) {
         let matching = game.getAMatch()
         if matching == nil {
-            playingCard.backgroundColor = game.isCardSelected(card: card) ? #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1) : #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+            playingCard.backgroundColor = game.isCardSelected(card) ? #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1) : #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
         } else {
-            if (!game.isCardSelected(card: card)) {
+            if (!game.isCardSelected(card)) {
                 playingCard.backgroundColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
             } else {
                 playingCard.backgroundColor = matching! ? #colorLiteral(red: 0.4666666687, green: 0.7647058964, blue: 0.2666666806, alpha: 1) : #colorLiteral(red: 0.5725490451, green: 0, blue: 0.2313725501, alpha: 1)
