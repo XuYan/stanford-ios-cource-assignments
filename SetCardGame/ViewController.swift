@@ -100,12 +100,22 @@ class ViewController: UIViewController {
         grid.cellCount = game.cardsOnScreen.count
         for i in 0..<game.cardsOnScreen.count {
             let card = game.cardsOnScreen[i]
-            let playingCard = PlayingCard(frame: grid[i]!, color: card.color.rawValue, shape: card.shape.rawValue, shading: card.shading.rawValue, number: card.number)
-            cardViewByModel[card] = playingCard
-            cardModelByView[playingCard] = card
-
+            let playingCard = PlayingCard(frame: CGRect(), color: card.color.rawValue, shape: card.shape.rawValue, shading: card.shading.rawValue, number: card.number)
             drawCard(playingCard: playingCard, card: card)
-            addTapGesture(to: playingCard)
+
+            UIViewPropertyAnimator.runningPropertyAnimator(
+                withDuration: 0.5,
+                delay: 0.2 * Double(i),
+                options: .curveEaseInOut,
+                animations: {
+                    playingCard.frame = self.grid[i]!
+                },
+                completion: { position in
+                    self.cardViewByModel[card] = playingCard
+                    self.cardModelByView[playingCard] = card
+                    self.addTapGesture(to: playingCard)
+                }
+            )
         }
     }
     
