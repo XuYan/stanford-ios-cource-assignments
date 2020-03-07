@@ -69,7 +69,7 @@ struct SetGame {
         }
     }
     
-    func getAMatch() -> Bool? {
+    func isAMatch() -> Bool? {
         if selectedCards.count == 3 {
             let card1 = selectedCards[0]
             let card2 = selectedCards[1]

@@ -27,30 +27,42 @@ class ViewController: UIViewController {
     private func drawCard(playingCard: PlayingCard, card: Card) {
         setBackground(playingCard: playingCard, card: card)
         setSelectionState(playingCard: playingCard, selectionState: game.isCardSelected(card))
-        playingCard.layer.borderWidth = 2
-        playingCard.layer.borderColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+        setBorder(playingCard)
         cardsContainer.addSubview(playingCard)
     }
 
     @IBOutlet weak var moreCardsButton: UIButton!
 
     @objc func touchCard(_ sender: UIGestureRecognizer) {
-        let matching = game.getAMatch()
-        if matching != nil {
-            if matching! {
-                game.replaceMatchingCards()
-            }
-            game.clearSelectedCards()
-        } else {
-            if let cardModel = cardModelByView[sender.view as! PlayingCard] {
+        if let playingCard = sender.view as? PlayingCard,
+            let cardModel = cardModelByView[playingCard] {
                 if game.isCardSelected(cardModel) {
                     game.unselectCard(cardModel)
                 } else {
                     game.selectCard(cardModel)
                 }
-            }
+                updateViewFromModel(cardModel)
         }
-        updateViewFromModel()
+    }
+    
+    private func removeMatchedCards() {
+        let matchedPlayingCards = game.selectedCards.map { (cardModel) -> PlayingCard in
+            self.cardViewByModel[cardModel]!
+        }
+        matchedPlayingCards.forEach { (playingCard) in
+            UIViewPropertyAnimator.runningPropertyAnimator(
+                withDuration: 0.5,
+                delay: 0,
+                options: .allowUserInteraction,
+                animations: {
+                    playingCard.alpha = 0
+                },
+                completion: { _ in
+                    playingCard.removeFromSuperview()
+                    self.game.replaceMatchingCards()
+                }
+            )
+        }
     }
     
     private func setSelectionState(playingCard: PlayingCard, selectionState: Bool) {
@@ -65,8 +77,13 @@ class ViewController: UIViewController {
         }
     }
     
+    private func setBorder(_ playingCard: PlayingCard) {
+        playingCard.layer.borderWidth = 2
+        playingCard.layer.borderColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+    }
+    
     private func setBackground(playingCard: PlayingCard, card: Card) {
-        let matching = game.getAMatch()
+        let matching = game.isAMatch()
         if matching == nil {
             playingCard.backgroundColor = game.isCardSelected(card) ? #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1) : #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
         } else {
@@ -80,6 +97,7 @@ class ViewController: UIViewController {
     
     @IBAction func addMoreCards(_ sender: UIButton) {
         game.popCardsFromCardDeck(numberOfCards: 3)
+        // TODO: This is wrong!
         updateViewFromModel()
         
         if game.cardDeck.count == 0 {
@@ -95,27 +113,53 @@ class ViewController: UIViewController {
         updateViewFromModel()
     }
     
-    private func updateViewFromModel() {
-        cardsContainer.subviews.forEach({ $0.removeFromSuperview() })
+    private func updateViewFromModel(_ card: Card? = nil) {
+        if card == nil {
+            updateEntireView()
+        } else {
+            updateSingleCardView(card!)
+        }
+        let match = game.isAMatch()
+        if match != nil {
+            if match! {
+                removeMatchedCards()
+                // deal new cards
+            } else {
+                // remove color
+            }
+            game.clearSelectedCards()
+        }
+    }
+    
+    private func updateEntireView() {
+        cardsContainer.subviews.forEach { $0.removeFromSuperview() }
         grid.cellCount = game.cardsOnScreen.count
-        for i in 0..<game.cardsOnScreen.count {
-            let card = game.cardsOnScreen[i]
-            let playingCard = PlayingCard(frame: CGRect(), color: card.color.rawValue, shape: card.shape.rawValue, shading: card.shading.rawValue, number: card.number)
-            drawCard(playingCard: playingCard, card: card)
+         for i in 0..<game.cardsOnScreen.count {
+             let card = game.cardsOnScreen[i]
+             let playingCard = PlayingCard(frame: CGRect(), color: card.color.rawValue, shape: card.shape.rawValue, shading: card.shading.rawValue, number: card.number)
+             drawCard(playingCard: playingCard, card: card)
 
-            UIViewPropertyAnimator.runningPropertyAnimator(
-                withDuration: 0.5,
-                delay: 0.2 * Double(i),
-                options: .curveEaseInOut,
-                animations: {
-                    playingCard.frame = self.grid[i]!
-                },
-                completion: { position in
-                    self.cardViewByModel[card] = playingCard
-                    self.cardModelByView[playingCard] = card
-                    self.addTapGesture(to: playingCard)
-                }
-            )
+             UIViewPropertyAnimator.runningPropertyAnimator(
+                 withDuration: 0.5,
+                 delay: 0.2 * Double(i),
+                 options: .curveEaseInOut,
+                 animations: {
+                     playingCard.frame = self.grid[i]!
+                 },
+                 completion: { position in
+                     self.cardViewByModel[card] = playingCard
+                     self.cardModelByView[playingCard] = card
+                     self.addTapGesture(to: playingCard)
+                 }
+             )
+         }
+    }
+    
+    private func updateSingleCardView(_ card: Card) {
+        if let playingCard = cardViewByModel[card] {
+            setBackground(playingCard: playingCard, card: card)
+            setSelectionState(playingCard: playingCard, selectionState: game.isCardSelected(card))
+            setBorder(playingCard)
         }
     }
     
