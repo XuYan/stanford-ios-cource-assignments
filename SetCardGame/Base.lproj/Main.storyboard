@@ -59,7 +59,7 @@
                     </view>
                     <connections>
                         <outlet property="cardsContainer" destination="u9U-Vy-5TO" id="w8b-qW-uCE"/>
-                        <outlet property="moreCardsButton" destination="nwK-NS-rjI" id="J6x-Fr-ky9"/>
+                        <outlet property="dealMore" destination="nwK-NS-rjI" id="J6x-Fr-ky9"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>

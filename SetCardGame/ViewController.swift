@@ -23,7 +23,7 @@ class ViewController: UIViewController {
         updateViewFromModel()
     }
     
-    @IBOutlet weak var moreCardsButton: UIButton!
+    @IBOutlet weak var dealMore: UIButton!
 
     @objc func touchCard(_ sender: UIGestureRecognizer) {
         if let playingCard = sender.view as? PlayingCard,
@@ -74,7 +74,7 @@ class ViewController: UIViewController {
         }
 
         if game.cardDeck.count == 0 {
-            moreCardsButton.isEnabled = false
+            dealMore.isEnabled = false
         }
     }
 
@@ -82,7 +82,7 @@ class ViewController: UIViewController {
         game = SetGame()
         cardViewByModel = [:]
         cardModelByView = [:]
-        moreCardsButton.isEnabled = true
+        dealMore.isEnabled = true
         updateViewFromModel()
     }
     
@@ -143,10 +143,6 @@ class ViewController: UIViewController {
         }
     }
     
-    private func addView(_ cards: [Card]) {
-        
-    }
-    
     private func addTapGesture(to: PlayingCard) {
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(touchCard(_:)))
         to.addGestureRecognizer(tapGestureRecognizer)
@@ -163,11 +159,11 @@ class ViewController: UIViewController {
     }
     
     private func addRotationGesture(to: UIView) {
-        let rotationGestureRecognizer = UIRotationGestureRecognizer(target: self, action: #selector(rotatePiece(_:)))
+        let rotationGestureRecognizer = UIRotationGestureRecognizer(target: self, action: #selector(rotate(_:)))
         to.addGestureRecognizer(rotationGestureRecognizer)
     }
     
-    @objc func rotatePiece(_ sender: UIGestureRecognizer) {
+    @objc func rotate(_ sender: UIGestureRecognizer) {
         game.shuffle()
         updateViewFromModel()
     }
