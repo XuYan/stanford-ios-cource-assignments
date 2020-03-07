@@ -10,7 +10,6 @@ import UIKit
 
 class ViewController: UIViewController {
     var game = SetGame()
-    var playingCards = [PlayingCard]()
     var cardViewByModel = [Card:PlayingCard]()
     var cardModelByView = [PlayingCard:Card]()
     var grid = Grid(layout: .aspectRatio(2/3))
@@ -41,7 +40,7 @@ class ViewController: UIViewController {
                 } else {
                     game.selectCard(cardModel)
                 }
-                updateViewFromModel(cardModel)
+                updateViewFromModel([cardModel])
         }
     }
     
@@ -76,7 +75,7 @@ class ViewController: UIViewController {
     }
     
     private func setBackground(playingCard: PlayingCard, card: Card) {
-        let matching = game.isAMatch()
+        let matching = game.findAMatch()
         if matching == nil {
             playingCard.backgroundColor = game.isCardSelected(card) ? #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1) : #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
         } else {
@@ -89,10 +88,19 @@ class ViewController: UIViewController {
     }
     
     @IBAction func addMoreCards(_ sender: UIButton) {
-        game.popCardsFromCardDeck(numberOfCards: 3)
-        // TODO: This is wrong!
-        updateViewFromModel()
-        
+        let newCards = game.popCardsFromCardDeck(numberOfCards: 3)
+        grid.cellCount = game.cardsOnScreen.count
+        for i in 0..<game.cardsOnScreen.count - 3 {
+            cardViewByModel[game.cardsOnScreen[i]]!.frame = grid[i]!
+        }
+        for i in 0...2 {
+            let cardModel = newCards[i]
+            let cardView = PlayingCard(frame: grid[grid.cellCount - 3 + i]!, color: cardModel.color.rawValue, shape: cardModel.shape.rawValue, shading: cardModel.shading.rawValue, number: cardModel.number)
+            cardViewByModel[cardModel] = cardView
+            cardModelByView[cardView] = cardModel
+            drawCard(playingCard: cardView, card: cardModel)
+        }
+
         if game.cardDeck.count == 0 {
             moreCardsButton.isEnabled = false
         }
@@ -106,21 +114,23 @@ class ViewController: UIViewController {
         updateViewFromModel()
     }
     
-    private func updateViewFromModel(_ card: Card? = nil) {
-        if card == nil {
+    private func updateViewFromModel(_ cards: [Card]? = nil) {
+        if cards == nil {
             updateEntireView()
         } else {
-            updateSingleCardView(card!)
+            updateView(cards!)
         }
-        let match = game.isAMatch()
+        let match = game.findAMatch()
         if match != nil {
             if match! {
                 removeMatchedCards()
                 // deal new cards
+                game.clearSelectedCards()
             } else {
-                // remove color
+                let selectedCards = game.selectedCards
+                game.clearSelectedCards()
+                updateViewFromModel(selectedCards)
             }
-            game.clearSelectedCards()
         }
     }
     
@@ -148,12 +158,18 @@ class ViewController: UIViewController {
          }
     }
     
-    private func updateSingleCardView(_ card: Card) {
-        if let playingCard = cardViewByModel[card] {
-            setSelectionState(playingCard: playingCard, selected: game.isCardSelected(card))
-            setBackground(playingCard: playingCard, card: card)
-            setBorder(playingCard)
+    private func updateView(_ cards: [Card]) {
+        cards.forEach { (card) in
+            if let playingCard = cardViewByModel[card] {
+                setSelectionState(playingCard: playingCard, selected: game.isCardSelected(card))
+                setBackground(playingCard: playingCard, card: card)
+                setBorder(playingCard)
+            }
         }
+    }
+    
+    private func addView(_ cards: [Card]) {
+        
     }
     
     private func addTapGesture(to: PlayingCard) {

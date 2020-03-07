@@ -63,13 +63,17 @@ struct SetGame {
         selectedCards.remove(at: index)
     }
     
-    mutating func popCardsFromCardDeck(numberOfCards: Int) {
+    mutating func popCardsFromCardDeck(numberOfCards: Int) -> [Card] {
+        var newCards: [Card] = []
         for _ in 1...numberOfCards {
-            cardsOnScreen.append(cardDeck.removeFirst())
+            let card = cardDeck.removeFirst()
+            newCards.append(card)
+            cardsOnScreen.append(card)
         }
+        return newCards
     }
     
-    func isAMatch() -> Bool? {
+    func findAMatch() -> Bool? {
         if selectedCards.count == 3 {
             let card1 = selectedCards[0]
             let card2 = selectedCards[1]
