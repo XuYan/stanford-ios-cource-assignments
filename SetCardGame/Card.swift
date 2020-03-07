@@ -37,7 +37,7 @@ struct Card: Equatable, Hashable {
     }
     
     enum Shading: String, CaseIterable {
-        case striped = "striped"
+        case striped = "stripe"
         case solid = "solid"
         case open = "open"
     }
