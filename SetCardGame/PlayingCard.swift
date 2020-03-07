@@ -159,6 +159,28 @@ extension PlayingCard {
     private var totalShapeWidth: CGFloat {
         return CGFloat(number) * shapeWidth + CGFloat(number - 1) * gapBetweenShapes
     }
+    
+    func setBorder() {
+        self.layer.borderWidth = 1
+        self.layer.borderColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+    }
+    
+    func setBackground(gameHasMatch: Bool?, isSelected: Bool) {
+        if gameHasMatch == nil {
+            self.backgroundColor = isSelected ? #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1) : #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+        } else {
+            if (!isSelected) {
+                self.backgroundColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+            } else {
+                self.backgroundColor = gameHasMatch! ? #colorLiteral(red: 0.4666666687, green: 0.7647058964, blue: 0.2666666806, alpha: 1) : #colorLiteral(red: 0.5725490451, green: 0, blue: 0.2313725501, alpha: 1)
+            }
+        }
+    }
+    
+    func setSelectionState(selected: Bool) {
+        self.layer.cornerRadius = selected ? 8.0 : 0.0
+        self.layer.masksToBounds = true
+    }
 }
 
 

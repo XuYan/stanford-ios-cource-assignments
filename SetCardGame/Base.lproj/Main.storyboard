@@ -29,7 +29,7 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="25"/>
                                 <state key="normal" title="3 More Cards"/>
                                 <connections>
-                                    <action selector="addMoreCards:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Ed6-WO-jar"/>
+                                    <action selector="dealMoreCards:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Ed6-WO-jar"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QR9-CX-gBV">
@@ -39,7 +39,7 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="25"/>
                                 <state key="normal" title="Restart"/>
                                 <connections>
-                                    <action selector="restart:" destination="BYZ-38-t0r" eventType="touchUpInside" id="NaD-aa-KJh"/>
+                                    <action selector="restartGame:" destination="BYZ-38-t0r" eventType="touchUpInside" id="NaD-aa-KJh"/>
                                 </connections>
                             </button>
                             <view contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="u9U-Vy-5TO">

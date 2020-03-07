@@ -24,9 +24,9 @@ class ViewController: UIViewController {
     }
     
     private func drawCard(playingCard: PlayingCard, card: Card) {
-        setSelectionState(playingCard: playingCard, selected: game.isCardSelected(card))
-        setBackground(playingCard: playingCard, card: card)
-        setBorder(playingCard)
+        playingCard.setSelectionState(selected: game.isCardSelected(card))
+        playingCard.setBackground(gameHasMatch: game.findAMatch(), isSelected: game.isCardSelected(card))
+        playingCard.setBorder()
         cardsContainer.addSubview(playingCard)
     }
 
@@ -63,31 +63,8 @@ class ViewController: UIViewController {
             )
         }
     }
-    
-    private func setSelectionState(playingCard: PlayingCard, selected: Bool) {
-        playingCard.layer.cornerRadius = selected ? 8.0 : 0.0
-        playingCard.layer.masksToBounds = true
-    }
-    
-    private func setBorder(_ playingCard: PlayingCard) {
-        playingCard.layer.borderWidth = 1
-        playingCard.layer.borderColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
-    }
-    
-    private func setBackground(playingCard: PlayingCard, card: Card) {
-        let matching = game.findAMatch()
-        if matching == nil {
-            playingCard.backgroundColor = game.isCardSelected(card) ? #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1) : #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
-        } else {
-            if (!game.isCardSelected(card)) {
-                playingCard.backgroundColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
-            } else {
-                playingCard.backgroundColor = matching! ? #colorLiteral(red: 0.4666666687, green: 0.7647058964, blue: 0.2666666806, alpha: 1) : #colorLiteral(red: 0.5725490451, green: 0, blue: 0.2313725501, alpha: 1)
-            }
-        }
-    }
-    
-    @IBAction func addMoreCards(_ sender: UIButton) {
+
+    @IBAction func dealMoreCards(_ sender: UIButton) {
         let newCards = game.popCardsFromCardDeck(numberOfCards: 3)
         grid.cellCount = game.cardsOnScreen.count
         for i in 0..<game.cardsOnScreen.count - 3 {
@@ -106,7 +83,7 @@ class ViewController: UIViewController {
         }
     }
 
-    @IBAction func restart(_ sender: UIButton) {
+    @IBAction func restartGame(_ sender: UIButton) {
         game = SetGame()
         cardViewByModel = [:]
         cardModelByView = [:]
@@ -161,9 +138,9 @@ class ViewController: UIViewController {
     private func updateView(_ cards: [Card]) {
         cards.forEach { (card) in
             if let playingCard = cardViewByModel[card] {
-                setSelectionState(playingCard: playingCard, selected: game.isCardSelected(card))
-                setBackground(playingCard: playingCard, card: card)
-                setBorder(playingCard)
+                playingCard.setSelectionState(selected: game.isCardSelected(card))
+                playingCard.setBackground(gameHasMatch: game.findAMatch(), isSelected: game.isCardSelected(card))
+                playingCard.setBorder()
             }
         }
     }
@@ -184,7 +161,7 @@ class ViewController: UIViewController {
     }
     
     @objc func swipeDown(_ sender: UIGestureRecognizer) {
-        addMoreCards(UIButton())
+        dealMoreCards(UIButton())
     }
     
     private func addRotationGesture(to: UIView) {
