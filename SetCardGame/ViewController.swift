@@ -72,10 +72,11 @@ class ViewController: UIViewController {
         }
         for i in 0...2 {
             let cardModel = newCards[i]
-            let cardView = PlayingCard(frame: grid[grid.cellCount - 3 + i]!, color: cardModel.color.rawValue, shape: cardModel.shape.rawValue, shading: cardModel.shading.rawValue, number: cardModel.number)
+            let cardView = PlayingCard(frame: CGRect(), color: cardModel.color.rawValue, shape: cardModel.shape.rawValue, shading: cardModel.shading.rawValue, number: cardModel.number)
             cardViewByModel[cardModel] = cardView
             cardModelByView[cardView] = cardModel
             drawCard(playingCard: cardView, card: cardModel)
+            animateCardShowUp(delay: 0.2 * Double(i), targetFrame: grid[grid.cellCount - 3 + i]!, playingCard: cardView, card: cardModel)
         }
 
         if game.cardDeck.count == 0 {
@@ -119,20 +120,24 @@ class ViewController: UIViewController {
              let playingCard = PlayingCard(frame: CGRect(), color: card.color.rawValue, shape: card.shape.rawValue, shading: card.shading.rawValue, number: card.number)
              drawCard(playingCard: playingCard, card: card)
 
-             UIViewPropertyAnimator.runningPropertyAnimator(
-                 withDuration: 0.5,
-                 delay: 0.2 * Double(i),
-                 options: .curveEaseInOut,
-                 animations: {
-                     playingCard.frame = self.grid[i]!
-                 },
-                 completion: { position in
-                     self.cardViewByModel[card] = playingCard
-                     self.cardModelByView[playingCard] = card
-                     self.addTapGesture(to: playingCard)
-                 }
-             )
+            animateCardShowUp(delay: 0.2 * Double(i), targetFrame: grid[i]!, playingCard: playingCard, card: card)
          }
+    }
+    
+    private func animateCardShowUp(delay: Double, targetFrame: CGRect, playingCard: PlayingCard, card: Card) {
+        UIViewPropertyAnimator.runningPropertyAnimator(
+            withDuration: 0.5,
+            delay: delay,
+            options: .curveEaseInOut,
+            animations: {
+                playingCard.frame = targetFrame
+            },
+            completion: { position in
+                self.cardViewByModel[card] = playingCard
+                self.cardModelByView[playingCard] = card
+                self.addTapGesture(to: playingCard)
+            }
+        )
     }
     
     private func updateView(_ cards: [Card]) {
