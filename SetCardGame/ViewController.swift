@@ -25,8 +25,8 @@ class ViewController: UIViewController {
     }
     
     private func drawCard(playingCard: PlayingCard, card: Card) {
+        setSelectionState(playingCard: playingCard, selected: game.isCardSelected(card))
         setBackground(playingCard: playingCard, card: card)
-        setSelectionState(playingCard: playingCard, selectionState: game.isCardSelected(card))
         setBorder(playingCard)
         cardsContainer.addSubview(playingCard)
     }
@@ -65,20 +65,13 @@ class ViewController: UIViewController {
         }
     }
     
-    private func setSelectionState(playingCard: PlayingCard, selectionState: Bool) {
-        if selectionState {
-            playingCard.layer.borderWidth = 3.0
-            playingCard.layer.borderColor = UIColor.black.cgColor
-            playingCard.layer.cornerRadius = 8.0
-        } else {
-            playingCard.layer.borderWidth = 0.0
-            playingCard.layer.borderColor = UIColor.black.cgColor
-            playingCard.layer.cornerRadius = 0.0
-        }
+    private func setSelectionState(playingCard: PlayingCard, selected: Bool) {
+        playingCard.layer.cornerRadius = selected ? 8.0 : 0.0
+        playingCard.layer.masksToBounds = true
     }
     
     private func setBorder(_ playingCard: PlayingCard) {
-        playingCard.layer.borderWidth = 2
+        playingCard.layer.borderWidth = 1
         playingCard.layer.borderColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
     }
     
@@ -157,8 +150,8 @@ class ViewController: UIViewController {
     
     private func updateSingleCardView(_ card: Card) {
         if let playingCard = cardViewByModel[card] {
+            setSelectionState(playingCard: playingCard, selected: game.isCardSelected(card))
             setBackground(playingCard: playingCard, card: card)
-            setSelectionState(playingCard: playingCard, selectionState: game.isCardSelected(card))
             setBorder(playingCard)
         }
     }
