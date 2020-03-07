@@ -160,12 +160,12 @@ extension PlayingCard {
         return CGFloat(number) * shapeWidth + CGFloat(number - 1) * gapBetweenShapes
     }
     
-    func setBorder() {
+    private func setBorder() {
         self.layer.borderWidth = 1
         self.layer.borderColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
     }
     
-    func setBackground(gameHasMatch: Bool?, isSelected: Bool) {
+    private func setBackground(gameHasMatch: Bool?, isSelected: Bool) {
         if gameHasMatch == nil {
             self.backgroundColor = isSelected ? #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1) : #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
         } else {
@@ -177,9 +177,15 @@ extension PlayingCard {
         }
     }
     
-    func setSelectionState(selected: Bool) {
+    private func setSelectionState(selected: Bool) {
         self.layer.cornerRadius = selected ? 8.0 : 0.0
         self.layer.masksToBounds = true
+    }
+    
+    func draw(isSelected: Bool, gameHasMatch: Bool?) {
+        self.setSelectionState(selected: isSelected)
+        self.setBackground(gameHasMatch: gameHasMatch, isSelected: isSelected)
+        self.setBorder()
     }
 }
 

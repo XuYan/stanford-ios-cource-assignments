@@ -23,13 +23,6 @@ class ViewController: UIViewController {
         updateViewFromModel()
     }
     
-    private func drawCard(playingCard: PlayingCard, card: Card) {
-        playingCard.setSelectionState(selected: game.isCardSelected(card))
-        playingCard.setBackground(gameHasMatch: game.findAMatch(), isSelected: game.isCardSelected(card))
-        playingCard.setBorder()
-        cardsContainer.addSubview(playingCard)
-    }
-
     @IBOutlet weak var moreCardsButton: UIButton!
 
     @objc func touchCard(_ sender: UIGestureRecognizer) {
@@ -75,7 +68,8 @@ class ViewController: UIViewController {
             let cardView = PlayingCard(frame: CGRect(), color: cardModel.color.rawValue, shape: cardModel.shape.rawValue, shading: cardModel.shading.rawValue, number: cardModel.number)
             cardViewByModel[cardModel] = cardView
             cardModelByView[cardView] = cardModel
-            drawCard(playingCard: cardView, card: cardModel)
+            cardView.draw(isSelected: game.isCardSelected(cardModel), gameHasMatch: game.findAMatch())
+            cardsContainer.addSubview(cardView)
             animateCardShowUp(delay: 0.2 * Double(i), targetFrame: grid[grid.cellCount - 3 + i]!, playingCard: cardView, card: cardModel)
         }
 
@@ -115,13 +109,14 @@ class ViewController: UIViewController {
     private func updateEntireView() {
         cardsContainer.subviews.forEach { $0.removeFromSuperview() }
         grid.cellCount = game.cardsOnScreen.count
-         for i in 0..<game.cardsOnScreen.count {
-             let card = game.cardsOnScreen[i]
-             let playingCard = PlayingCard(frame: CGRect(), color: card.color.rawValue, shape: card.shape.rawValue, shading: card.shading.rawValue, number: card.number)
-             drawCard(playingCard: playingCard, card: card)
+        for i in 0..<game.cardsOnScreen.count {
+            let card = game.cardsOnScreen[i]
+            let playingCard = PlayingCard(frame: CGRect(), color: card.color.rawValue, shape: card.shape.rawValue, shading: card.shading.rawValue, number: card.number)
+            playingCard.draw(isSelected: game.isCardSelected(card), gameHasMatch: game.findAMatch())
+            cardsContainer.addSubview(playingCard)
 
             animateCardShowUp(delay: 0.2 * Double(i), targetFrame: grid[i]!, playingCard: playingCard, card: card)
-         }
+        }
     }
     
     private func animateCardShowUp(delay: Double, targetFrame: CGRect, playingCard: PlayingCard, card: Card) {
@@ -143,9 +138,7 @@ class ViewController: UIViewController {
     private func updateView(_ cards: [Card]) {
         cards.forEach { (card) in
             if let playingCard = cardViewByModel[card] {
-                playingCard.setSelectionState(selected: game.isCardSelected(card))
-                playingCard.setBackground(gameHasMatch: game.findAMatch(), isSelected: game.isCardSelected(card))
-                playingCard.setBorder()
+                playingCard.draw(isSelected: game.isCardSelected(card), gameHasMatch: game.findAMatch())
             }
         }
     }
