@@ -64,7 +64,7 @@ class ViewController: UIViewController {
             try game.addNumberOfCardsToScreenFromCardDeck(numberOfCards: 3)
             let count = game.cardsOnScreen.count
             for i in (count - 3)...(count - 1) {
-                addPlayingCardOnScreen(
+                addPlayingCardToScreen(
                     playingCard: createPlayingCard(for: game.cardsOnScreen[i]),
                     delay: 0.2 * Double(i - (count - 3)), targetFrame: targetFrames[i - (count - 3)])
             }
@@ -117,7 +117,7 @@ class ViewController: UIViewController {
         }
         for i in (grid.cellCount - 3)...(grid.cellCount - 1) {
             let playingCard = createPlayingCard(for: game.cardsOnScreen[i])
-            addPlayingCardOnScreen(playingCard: playingCard,
+            addPlayingCardToScreen(playingCard: playingCard,
                                    delay: 0.2 * Double(i - (grid.cellCount - 3)),
                                    targetFrame: grid[i]!)
         }
@@ -134,7 +134,7 @@ class ViewController: UIViewController {
         return playingCard
     }
     
-    private func addPlayingCardOnScreen(playingCard: PlayingCard, delay: Double, targetFrame: CGRect) {
+    private func addPlayingCardToScreen(playingCard: PlayingCard, delay: Double, targetFrame: CGRect) {
         if let card = cardByPlayingCard[playingCard] {
             playingCard.draw(isSelected: game.isCardSelected(card))
             cardsContainer.addSubview(playingCard)
@@ -175,7 +175,7 @@ class ViewController: UIViewController {
         grid.cellCount = game.cardsOnScreen.count
         for i in 0..<grid.cellCount {
             let playingCard = createPlayingCard(for: game.cardsOnScreen[i])
-            addPlayingCardOnScreen(
+            addPlayingCardToScreen(
                 playingCard: playingCard,
                 delay: 0.2 * Double(i),
                 targetFrame: grid[i]!)
@@ -190,7 +190,7 @@ class ViewController: UIViewController {
         UIViewPropertyAnimator.runningPropertyAnimator(
             withDuration: 0.5,
             delay: delay,
-            options: .curveEaseInOut,
+            options: .curveEaseOut,
             animations: {
                 playingCard.frame = targetFrame
             },
