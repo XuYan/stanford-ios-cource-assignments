@@ -50,9 +50,21 @@ class ViewController: UIViewController {
         }
         game.removeFromScreen(cards: self.game.selectedCards)
         game.clearSelectedCards()
-        selectedPlayingCards.forEach { (playingCard) in
-            playingCard.removeFromSuperview()
-        }
+        UIViewPropertyAnimator.runningPropertyAnimator(
+            withDuration: 1,
+            delay: 0,
+            options: .allowUserInteraction,
+            animations: {
+                selectedPlayingCards.forEach { (playingCard) in
+                    playingCard.alpha = 0
+                }
+            },
+            completion: { _ in
+                selectedPlayingCards.forEach { (playingCard) in
+                    playingCard.removeFromSuperview()
+                }
+            }
+        )
     }
     
     private func replaceMatchedCards() {
@@ -66,7 +78,7 @@ class ViewController: UIViewController {
             for i in (count - 3)...(count - 1) {
                 addPlayingCardToScreen(
                     playingCard: createPlayingCard(for: game.cardsOnScreen[i]),
-                    delay: 0.2 * Double(i - (count - 3)), targetFrame: targetFrames[i - (count - 3)])
+                    delay: 1 + 0.2 * Double(i - (count - 3)), targetFrame: targetFrames[i - (count - 3)])
             }
         } catch SetGame.GameError.insufficientCardsInDeck(let numberOfCards) {
             print("Unexpected error: card deck does not have \(numberOfCards) cards.")
@@ -76,29 +88,6 @@ class ViewController: UIViewController {
 
     }
     
-//    private func removeMatchedCardsssdfsdfa() {
-//        let selectedPlayingCards = game.selectedCards.map { (cardModel) -> PlayingCard in
-//            self.playingCardByCard[cardModel]!
-//        }
-//        UIViewPropertyAnimator.runningPropertyAnimator(
-//            withDuration: 0.5,
-//            delay: 0,
-//            options: .allowUserInteraction,
-//            animations: {
-//                selectedPlayingCards.forEach { (playingCard) in
-//                    playingCard.alpha = 0
-//                }
-//            },
-//            completion: { _ in
-//                self.game.removeFromScreen(cards: self.game.selectedCards)
-//                self.game.addNumberOfCardsToScreenFromCardDeck(numberOfCards: 3)
-//                selectedPlayingCards.forEach { (playingCard) in
-//                    playingCard.removeFromSuperview()
-//                }
-//            }
-//        )
-//    }
-
     @IBAction func dealMoreCards(_ sender: UIButton) {
         do {
             try game.addNumberOfCardsToScreenFromCardDeck(numberOfCards: 3)
