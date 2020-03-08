@@ -11,16 +11,16 @@ import UIKit
 @IBDesignable
 class PlayingCard: UIView {
     @IBInspectable
-    var color = "red" { didSet { setNeedsDisplay(); setNeedsLayout() } }
+    private(set) var color = "red" { didSet { setNeedsDisplay(); setNeedsLayout() } }
     
     @IBInspectable
-    var shape = "diamond" { didSet { setNeedsDisplay(); setNeedsLayout() } }
+    private(set) var shape = "diamond" { didSet { setNeedsDisplay(); setNeedsLayout() } }
 
     @IBInspectable
-    var shading = "open" { didSet { setNeedsDisplay(); setNeedsLayout() } }
+    private(set) var shading = "open" { didSet { setNeedsDisplay(); setNeedsLayout() } }
 
     @IBInspectable
-    var number = 2 { didSet { setNeedsDisplay(); setNeedsLayout() } }
+    private(set) var number = 2 { didSet { setNeedsDisplay(); setNeedsLayout() } }
     
     init(color: String, shape: String, shading: String, number: Int) {
         super.init(frame: CGRect())
