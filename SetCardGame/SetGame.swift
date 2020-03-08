@@ -9,11 +9,10 @@
 import Foundation
 
 struct SetGame {
-    let maxNumberOfCardsOnScreen = 24
-    var idToBeAssigned: Int
-    var cardDeck: [Card]
-    var cardsOnScreen: [Card]
-    var selectedCards: [Card]
+    private var idToBeAssigned: Int
+    private(set) var cardDeck: [Card]
+    private(set) var cardsOnScreen: [Card]
+    private(set) var selectedCards: [Card]
     
     init() {
         cardDeck = []
@@ -35,13 +34,17 @@ struct SetGame {
         }
         
         shuffle()
-        popCardsFromCardDeck(numberOfCards: 12)
+        do {
+            try addNumberOfCardsToScreenFromCardDeck(numberOfCards: 12)
+        } catch GameError.insufficientCardsInDeck(let numberOfCards) {
+            print("Unexpected error: card deck does not have \(numberOfCards) cards.")
+        } catch {
+            print("Unexpected error: \(error).")
+        }
     }
     
-    func isCardOnScreen(id: Int) -> Bool {
-        return cardsOnScreen.contains {
-            $0.id == id
-        }
+    func isCardDeckEmpty() -> Bool {
+        return cardDeck.count == 0
     }
     
     func isCardSelected(_ card: Card) -> Bool {
@@ -56,21 +59,18 @@ struct SetGame {
     }
     
     mutating func unselectCard(_ card: Card) {
-        if !isCardSelected(card) {
-            return
+        if let index = selectedCards.firstIndex(of: card) {
+            selectedCards.remove(at: index)
         }
-        let index = selectedCards.firstIndex(of: card)!
-        selectedCards.remove(at: index)
     }
     
-    mutating func popCardsFromCardDeck(numberOfCards: Int) -> [Card] {
-        var newCards: [Card] = []
-        for _ in 1...numberOfCards {
-            let card = cardDeck.removeFirst()
-            newCards.append(card)
-            cardsOnScreen.append(card)
+    mutating func addNumberOfCardsToScreenFromCardDeck(numberOfCards: Int) throws {
+        if numberOfCards > cardDeck.count {
+            throw GameError.insufficientCardsInDeck(numberOfCards: numberOfCards)
         }
-        return newCards
+        for _ in 1...numberOfCards {
+            cardsOnScreen.append(cardDeck.removeFirst())
+        }
     }
     
     func findAMatch() -> Bool? {
@@ -93,10 +93,11 @@ struct SetGame {
         selectedCards = []
     }
     
-    mutating func replaceMatchingCards() {
-        cardsOnScreen.removeAll(where: { selectedCards.contains($0) })
-        if cardDeck.count > 0 {
-            popCardsFromCardDeck(numberOfCards: 3)
+    mutating func removeFromScreen(cards: [Card]) {
+        cards.forEach { (card) in
+            if let index = cardsOnScreen.firstIndex(of: card) {
+                cardsOnScreen.remove(at: index)
+            }
         }
     }
     
@@ -122,5 +123,10 @@ struct SetGame {
         let id = idToBeAssigned
         idToBeAssigned += 1
         return id
+    }
+    
+    enum GameError: Error {
+        case insufficientCardsInDeck(numberOfCards: Int)
+        case invalidIndex(index: Int)
     }
 }

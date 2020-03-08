@@ -10,8 +10,8 @@ import UIKit
 
 class ViewController: UIViewController {
     var game = SetGame()
-    var cardViewByModel = [Card:PlayingCard]()
-    var cardModelByView = [PlayingCard:Card]()
+    var playingCardByCard = [Card:PlayingCard]()
+    var cardByPlayingCard = [PlayingCard:Card]()
     var grid = Grid(layout: .aspectRatio(2/3))
 
     @IBOutlet weak var cardsContainer: UIView!
@@ -26,62 +26,126 @@ class ViewController: UIViewController {
     @IBOutlet weak var dealMore: UIButton!
 
     @objc func touchCard(_ sender: UIGestureRecognizer) {
-        if let playingCard = sender.view as? PlayingCard,
-            let cardModel = cardModelByView[playingCard] {
-                if game.isCardSelected(cardModel) {
-                    game.unselectCard(cardModel)
-                } else {
-                    game.selectCard(cardModel)
-                }
-                updateViewFromModel([cardModel])
+        if let playingCard = sender.view as? PlayingCard, let cardModel = cardByPlayingCard[playingCard] {
+            if game.isCardSelected(cardModel) {
+                game.unselectCard(cardModel)
+            } else {
+                game.selectCard(cardModel)
+            }
+            updateViewFromModel([cardModel])
+        }
+    }
+    
+    private func recycleMatchedCards() {
+        if game.isCardDeckEmpty() {
+            removeMatchedCards()
+        } else {
+            replaceMatchedCards()
         }
     }
     
     private func removeMatchedCards() {
-        let matchedPlayingCards = game.selectedCards.map { (cardModel) -> PlayingCard in
-            self.cardViewByModel[cardModel]!
+        let selectedPlayingCards = game.selectedCards.map { (cardModel) -> PlayingCard in
+            self.playingCardByCard[cardModel]!
         }
-        matchedPlayingCards.forEach { (playingCard) in
-            UIViewPropertyAnimator.runningPropertyAnimator(
-                withDuration: 0.5,
-                delay: 0,
-                options: .allowUserInteraction,
-                animations: {
-                    playingCard.alpha = 0
-                },
-                completion: { _ in
-                    playingCard.removeFromSuperview()
-                    self.game.replaceMatchingCards()
-                }
-            )
+        game.removeFromScreen(cards: self.game.selectedCards)
+        game.clearSelectedCards()
+        selectedPlayingCards.forEach { (playingCard) in
+            playingCard.removeFromSuperview()
         }
     }
+    
+    private func replaceMatchedCards() {
+        let targetFrames = game.selectedCards.map { (cardModel) -> CGRect in
+            self.playingCardByCard[cardModel]!.frame
+        }
+        removeMatchedCards()
+        do {
+            try game.addNumberOfCardsToScreenFromCardDeck(numberOfCards: 3)
+            let count = game.cardsOnScreen.count
+            for i in (count - 3)...(count - 1) {
+                addPlayingCardOnScreen(
+                    playingCard: createPlayingCard(for: game.cardsOnScreen[i]),
+                    delay: 0.2 * Double(i - (count - 3)), targetFrame: targetFrames[i - (count - 3)])
+            }
+        } catch SetGame.GameError.insufficientCardsInDeck(let numberOfCards) {
+            print("Unexpected error: card deck does not have \(numberOfCards) cards.")
+        } catch {
+            print("Unexpected error: \(error).")
+        }
+
+    }
+    
+//    private func removeMatchedCardsssdfsdfa() {
+//        let selectedPlayingCards = game.selectedCards.map { (cardModel) -> PlayingCard in
+//            self.playingCardByCard[cardModel]!
+//        }
+//        UIViewPropertyAnimator.runningPropertyAnimator(
+//            withDuration: 0.5,
+//            delay: 0,
+//            options: .allowUserInteraction,
+//            animations: {
+//                selectedPlayingCards.forEach { (playingCard) in
+//                    playingCard.alpha = 0
+//                }
+//            },
+//            completion: { _ in
+//                self.game.removeFromScreen(cards: self.game.selectedCards)
+//                self.game.addNumberOfCardsToScreenFromCardDeck(numberOfCards: 3)
+//                selectedPlayingCards.forEach { (playingCard) in
+//                    playingCard.removeFromSuperview()
+//                }
+//            }
+//        )
+//    }
 
     @IBAction func dealMoreCards(_ sender: UIButton) {
-        let newCards = game.popCardsFromCardDeck(numberOfCards: 3)
+        do {
+            try game.addNumberOfCardsToScreenFromCardDeck(numberOfCards: 3)
+            onMoreCardsAddedToScreen()
+        } catch SetGame.GameError.insufficientCardsInDeck(let numberOfCards) {
+            print("Unexpected error: card deck does not have \(numberOfCards) cards.")
+        } catch {
+            print("Unexpected error: \(error).")
+        }
+    }
+    
+    private func onMoreCardsAddedToScreen() {
         grid.cellCount = game.cardsOnScreen.count
-        for i in 0..<game.cardsOnScreen.count - 3 {
-            cardViewByModel[game.cardsOnScreen[i]]!.frame = grid[i]!
+        for i in 0...grid.cellCount - 4 {
+            playingCardByCard[game.cardsOnScreen[i]]!.frame = grid[i]!
         }
-        for i in 0...2 {
-            let cardModel = newCards[i]
-            let cardView = PlayingCard(frame: CGRect(), color: cardModel.color.rawValue, shape: cardModel.shape.rawValue, shading: cardModel.shading.rawValue, number: cardModel.number)
-            cardViewByModel[cardModel] = cardView
-            cardModelByView[cardView] = cardModel
-            cardView.draw(isSelected: game.isCardSelected(cardModel), gameHasMatch: game.findAMatch())
-            cardsContainer.addSubview(cardView)
-            animateCardShowUp(delay: 0.2 * Double(i), targetFrame: grid[grid.cellCount - 3 + i]!, playingCard: cardView, card: cardModel)
+        for i in (grid.cellCount - 3)...(grid.cellCount - 1) {
+            let playingCard = createPlayingCard(for: game.cardsOnScreen[i])
+            addPlayingCardOnScreen(playingCard: playingCard,
+                                   delay: 0.2 * Double(i - (grid.cellCount - 3)),
+                                   targetFrame: grid[i]!)
         }
-
-        if game.cardDeck.count == 0 {
+        
+        if game.isCardDeckEmpty() {
             dealMore.isEnabled = false
         }
     }
-
+    
+    private func createPlayingCard(for card: Card) -> PlayingCard {
+        let playingCard = PlayingCard(color: card.color.rawValue, shape: card.shape.rawValue, shading: card.shading.rawValue, number: card.number)
+        playingCardByCard[card] = playingCard
+        cardByPlayingCard[playingCard] = card
+        return playingCard
+    }
+    
+    private func addPlayingCardOnScreen(playingCard: PlayingCard, delay: Double, targetFrame: CGRect) {
+        if let card = cardByPlayingCard[playingCard] {
+            playingCard.draw(isSelected: game.isCardSelected(card))
+            cardsContainer.addSubview(playingCard)
+            animateCardShowUp(delay: delay, targetFrame: targetFrame, playingCard: playingCard, card: card)
+        }
+    }
+    
     @IBAction func restartGame(_ sender: UIButton) {
         game = SetGame()
-        cardViewByModel = [:]
-        cardModelByView = [:]
+        playingCardByCard = [:]
+        cardByPlayingCard = [:]
         dealMore.isEnabled = true
         updateViewFromModel()
     }
@@ -90,15 +154,18 @@ class ViewController: UIViewController {
         if cards == nil {
             updateEntireView()
         } else {
-            updateView(cards!)
+            updateView(for: cards!)
         }
+        
         let match = game.findAMatch()
         if match != nil {
-            if match! {
-                removeMatchedCards()
+            if !match! {
+                print("match found")
+                recycleMatchedCards()
                 // deal new cards
                 game.clearSelectedCards()
             } else {
+                print("no match found")
                 let selectedCards = game.selectedCards
                 game.clearSelectedCards()
                 updateViewFromModel(selectedCards)
@@ -107,16 +174,19 @@ class ViewController: UIViewController {
     }
     
     private func updateEntireView() {
-        cardsContainer.subviews.forEach { $0.removeFromSuperview() }
+        removeAllPlayingCardsOnScreen()
         grid.cellCount = game.cardsOnScreen.count
-        for i in 0..<game.cardsOnScreen.count {
-            let card = game.cardsOnScreen[i]
-            let playingCard = PlayingCard(frame: CGRect(), color: card.color.rawValue, shape: card.shape.rawValue, shading: card.shading.rawValue, number: card.number)
-            playingCard.draw(isSelected: game.isCardSelected(card), gameHasMatch: game.findAMatch())
-            cardsContainer.addSubview(playingCard)
-
-            animateCardShowUp(delay: 0.2 * Double(i), targetFrame: grid[i]!, playingCard: playingCard, card: card)
+        for i in 0..<grid.cellCount {
+            let playingCard = createPlayingCard(for: game.cardsOnScreen[i])
+            addPlayingCardOnScreen(
+                playingCard: playingCard,
+                delay: 0.2 * Double(i),
+                targetFrame: grid[i]!)
         }
+    }
+    
+    private func removeAllPlayingCardsOnScreen() {
+        cardsContainer.subviews.forEach { $0.removeFromSuperview() }
     }
     
     private func animateCardShowUp(delay: Double, targetFrame: CGRect, playingCard: PlayingCard, card: Card) {
@@ -128,17 +198,15 @@ class ViewController: UIViewController {
                 playingCard.frame = targetFrame
             },
             completion: { position in
-                self.cardViewByModel[card] = playingCard
-                self.cardModelByView[playingCard] = card
                 self.addTapGesture(to: playingCard)
             }
         )
     }
     
-    private func updateView(_ cards: [Card]) {
+    private func updateView(for cards: [Card]) {
         cards.forEach { (card) in
-            if let playingCard = cardViewByModel[card] {
-                playingCard.draw(isSelected: game.isCardSelected(card), gameHasMatch: game.findAMatch())
+            if let playingCard = playingCardByCard[card] {
+                playingCard.draw(isSelected: game.isCardSelected(card))
             }
         }
     }

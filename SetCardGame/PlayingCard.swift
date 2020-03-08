@@ -22,8 +22,8 @@ class PlayingCard: UIView {
     @IBInspectable
     var number = 2 { didSet { setNeedsDisplay(); setNeedsLayout() } }
     
-    init(frame: CGRect, color: String, shape: String, shading: String, number: Int) {
-        super.init(frame: frame)
+    init(color: String, shape: String, shading: String, number: Int) {
+        super.init(frame: CGRect())
         self.color = color
         self.shape = shape
         self.shading = shading
@@ -131,7 +131,7 @@ extension PlayingCard {
     private struct SizeRatio {
         static let ShapeWidthToBoundsWidth: CGFloat = 0.3
         static let ShapeHeightToBoundsHeight: CGFloat = 0.5
-        static let stripeGapToBoundsWidth: CGFloat = 0.05
+        static let stripeGapToBoundsWidth: CGFloat = 0.1
         static let curveToShapeWidth: CGFloat = 0.35
         static let gapBetweenShapesToWidth: CGFloat = 0.025
     }
@@ -165,26 +165,18 @@ extension PlayingCard {
         self.layer.borderColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
     }
     
-    private func setBackground(gameHasMatch: Bool?, isSelected: Bool) {
-        if gameHasMatch == nil {
-            self.backgroundColor = isSelected ? #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1) : #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
-        } else {
-            if (!isSelected) {
-                self.backgroundColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
-            } else {
-                self.backgroundColor = gameHasMatch! ? #colorLiteral(red: 0.4666666687, green: 0.7647058964, blue: 0.2666666806, alpha: 1) : #colorLiteral(red: 0.5725490451, green: 0, blue: 0.2313725501, alpha: 1)
-            }
-        }
+    private func setBackground(isSelected: Bool) {
+        self.backgroundColor = isSelected ? #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1) : #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
     }
     
-    private func setSelectionState(selected: Bool) {
-        self.layer.cornerRadius = selected ? 8.0 : 0.0
+    private func setSelectionState(isSelected: Bool) {
+        self.layer.cornerRadius = isSelected ? 8.0 : 0.0
         self.layer.masksToBounds = true
     }
     
-    func draw(isSelected: Bool, gameHasMatch: Bool?) {
-        self.setSelectionState(selected: isSelected)
-        self.setBackground(gameHasMatch: gameHasMatch, isSelected: isSelected)
+    func draw(isSelected: Bool) {
+        self.setSelectionState(isSelected: isSelected)
+        self.setBackground(isSelected: isSelected)
         self.setBorder()
     }
 }
