@@ -159,13 +159,10 @@ class ViewController: UIViewController {
         
         let match = game.findAMatch()
         if match != nil {
-            if !match! {
-                print("match found")
+            if match! {
                 recycleMatchedCards()
-                // deal new cards
                 game.clearSelectedCards()
             } else {
-                print("no match found")
                 let selectedCards = game.selectedCards
                 game.clearSelectedCards()
                 updateViewFromModel(selectedCards)
