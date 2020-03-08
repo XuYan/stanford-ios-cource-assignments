@@ -22,8 +22,8 @@ class PlayingCard: UIView {
     @IBInspectable
     private(set) var number = 2 { didSet { setNeedsDisplay(); setNeedsLayout() } }
     
-    init(color: String, shape: String, shading: String, number: Int) {
-        super.init(frame: CGRect())
+    init(initPosition: CGPoint, color: String, shape: String, shading: String, number: Int) {
+        super.init(frame: CGRect(x: initPosition.x, y: initPosition.y, width: 0, height: 0))
         self.color = color
         self.shape = shape
         self.shading = shading

@@ -128,7 +128,8 @@ class ViewController: UIViewController {
     }
     
     private func createPlayingCard(for card: Card) -> PlayingCard {
-        let playingCard = PlayingCard(color: card.color.rawValue, shape: card.shape.rawValue, shading: card.shading.rawValue, number: card.number)
+        let initPosition = CGPoint(x: dealMore.frame.midX, y: dealMore.frame.midY)
+        let playingCard = PlayingCard(initPosition: initPosition, color: card.color.rawValue, shape: card.shape.rawValue, shading: card.shading.rawValue, number: card.number)
         playingCardByCard[card] = playingCard
         cardByPlayingCard[playingCard] = card
         return playingCard
