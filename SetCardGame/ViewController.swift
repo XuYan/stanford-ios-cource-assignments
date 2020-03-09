@@ -72,30 +72,31 @@ class ViewController: UIViewController {
             self.playingCardByCard[cardModel]!.frame
         }
         removeMatchedCards()
+        addNewCards()
+        let count = game.cardsOnScreen.count
+        for i in (count - 3)...(count - 1) {
+            addPlayingCardToScreen(
+                playingCard: createPlayingCard(for: game.cardsOnScreen[i]),
+                delay: 1 + 0.2 * Double(i - (count - 3)), targetFrame: targetFrames[i - (count - 3)])
+        }
+    }
+    
+    @IBAction func dealMoreCards(_ sender: UIButton) {
+        addNewCards()
+        onMoreCardsAddedToScreen()
+    }
+    
+    private func addNewCards() {
         do {
             try game.addNumberOfCardsToScreenFromCardDeck(numberOfCards: 3)
-            let count = game.cardsOnScreen.count
-            for i in (count - 3)...(count - 1) {
-                addPlayingCardToScreen(
-                    playingCard: createPlayingCard(for: game.cardsOnScreen[i]),
-                    delay: 1 + 0.2 * Double(i - (count - 3)), targetFrame: targetFrames[i - (count - 3)])
-            }
         } catch SetGame.GameError.insufficientCardsInDeck(let numberOfCards) {
             print("Unexpected error: card deck does not have \(numberOfCards) cards.")
         } catch {
             print("Unexpected error: \(error).")
         }
-
-    }
-    
-    @IBAction func dealMoreCards(_ sender: UIButton) {
-        do {
-            try game.addNumberOfCardsToScreenFromCardDeck(numberOfCards: 3)
-            onMoreCardsAddedToScreen()
-        } catch SetGame.GameError.insufficientCardsInDeck(let numberOfCards) {
-            print("Unexpected error: card deck does not have \(numberOfCards) cards.")
-        } catch {
-            print("Unexpected error: \(error).")
+        
+        if game.isCardDeckEmpty() {
+            dealMore.isEnabled = false
         }
     }
     
@@ -109,10 +110,6 @@ class ViewController: UIViewController {
             addPlayingCardToScreen(playingCard: playingCard,
                                    delay: 0.2 * Double(i - (grid.cellCount - 3)),
                                    targetFrame: grid[i]!)
-        }
-        
-        if game.isCardDeckEmpty() {
-            dealMore.isEnabled = false
         }
     }
     
