@@ -54,6 +54,17 @@ class PlayingCard: UIView {
         }
     }
     
+    func flip() {
+        UIView.transition(
+            with: self,
+            duration: 0.5,
+            options: [.transitionFlipFromLeft],
+            animations: {
+                self.facingDown = !self.facingDown
+            }
+        )
+    }
+    
     private func createPath(_ path: UIBezierPath, _ index: Int) -> UIBezierPath {
         if shape == "oval" {
             return createOvalPath(path, index)
