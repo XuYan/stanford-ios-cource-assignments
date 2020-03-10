@@ -22,12 +22,16 @@ class PlayingCard: UIView {
     @IBInspectable
     private(set) var number = 2 { didSet { setNeedsDisplay(); setNeedsLayout() } }
     
+    @IBInspectable
+    var facingDown = true { didSet { setNeedsDisplay(); setNeedsLayout() } }
+    
     init(initPosition: CGPoint, color: String, shape: String, shading: String, number: Int) {
         super.init(frame: CGRect(x: initPosition.x, y: initPosition.y, width: 0, height: 0))
         self.color = color
         self.shape = shape
         self.shading = shading
         self.number = number
+        self.facingDown = true
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -35,13 +39,19 @@ class PlayingCard: UIView {
     }
     
     override func draw(_ rect: CGRect) {
-        let path = UIBezierPath()
-        setColor()
-        for i in 1...number {
-            createPath(path, i)
+        if facingDown {
+            if let cardBackImage = UIImage(named: "CardBack") {
+                cardBackImage.draw(in: bounds)
+            }
+        } else {
+            let path = UIBezierPath()
+            setColor()
+            for i in 1...number {
+                createPath(path, i)
+            }
+            path.addClip()
+            setShading(path)
         }
-        path.addClip()
-        setShading(path)
     }
     
     private func createPath(_ path: UIBezierPath, _ index: Int) -> UIBezierPath {

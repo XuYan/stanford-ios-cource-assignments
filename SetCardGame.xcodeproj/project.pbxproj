@@ -64,6 +64,7 @@
 		85CA4947240769A900B37ADE /* SetCardGame */ = {
 			isa = PBXGroup;
 			children = (
+				85CA4951240769AD00B37ADE /* Assets.xcassets */,
 				85CA4963240EED0A00B37ADE /* Grid.swift */,
 				85CA495C240769BE00B37ADE /* Supporting Files */,
 				85CA494C240769A900B37ADE /* ViewController.swift */,
@@ -81,7 +82,6 @@
 			children = (
 				85CA4948240769A900B37ADE /* AppDelegate.swift */,
 				85CA494A240769A900B37ADE /* SceneDelegate.swift */,
-				85CA4951240769AD00B37ADE /* Assets.xcassets */,
 				85CA4953240769AD00B37ADE /* LaunchScreen.storyboard */,
 			);
 			path = "Supporting Files";

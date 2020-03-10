@@ -183,6 +183,7 @@ class ViewController: UIViewController {
             },
             completion: { position in
                 self.addTapGesture(to: playingCard)
+                playingCard.facingDown = false
             }
         )
     }
