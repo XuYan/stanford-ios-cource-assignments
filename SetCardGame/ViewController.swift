@@ -16,6 +16,7 @@ class ViewController: UIViewController {
     lazy var animator = UIDynamicAnimator(referenceView: view)
 
     @IBOutlet weak var cardsContainer: UIView!
+    @IBOutlet weak var restart: UIButton!
     override func viewDidLoad() {
         super.viewDidLoad()
         grid.frame = cardsContainer.bounds
@@ -49,25 +50,44 @@ class ViewController: UIViewController {
         let selectedPlayingCards = game.selectedCards.map { (cardModel) -> PlayingCard in
             self.playingCardByCard[cardModel]!
         }
-        game.removeFromScreen(cards: self.game.selectedCards)
+        game.removeFromScreen(cards: game.selectedCards)
         game.clearSelectedCards()
+        
+        let collisionBehavior = UICollisionBehavior(items: selectedPlayingCards)
+        collisionBehavior.translatesReferenceBoundsIntoBoundary = true
+        animator.addBehavior(collisionBehavior)
+        
+        let itemBehavior = UIDynamicItemBehavior(items: selectedPlayingCards)
+        itemBehavior.elasticity = 0.7
+        animator.addBehavior(itemBehavior)
+        
+        selectedPlayingCards.forEach { (playingCard) in
+            let pushBehavior = UIPushBehavior(items: [playingCard], mode: .instantaneous)
+            pushBehavior.magnitude = 5
+            pushBehavior.pushDirection = CGVector(dx: view.center.x - playingCard.frame.midX, dy: view.center.y - playingCard.frame.midY)
+            playingCard.flip()
+            animator.addBehavior(pushBehavior)
+        }
+
         UIViewPropertyAnimator.runningPropertyAnimator(
             withDuration: 1,
-            delay: 0,
+            delay: 1.2,
             options: .allowUserInteraction,
             animations: {
                 selectedPlayingCards.forEach { (playingCard) in
                     playingCard.alpha = 0
+                    playingCard.frame = self.restart.frame
                 }
             },
             completion: { _ in
+                self.animator.removeAllBehaviors()
                 selectedPlayingCards.forEach { (playingCard) in
                     playingCard.removeFromSuperview()
                 }
             }
         )
     }
-    
+
     private func replaceMatchedCards() {
         let targetFrames = game.selectedCards.map { (cardModel) -> CGRect in
             self.playingCardByCard[cardModel]!.frame
@@ -162,31 +182,6 @@ class ViewController: UIViewController {
                         animation.toValue = NSValue(cgPoint: CGPoint(x: playingCard.center.x + 10, y: playingCard.center.y))
 
                         playingCard.layer.add(animation, forKey: "position")
-                        
-//                        let topAttachmentBehavior = UIAttachmentBehavior(
-//                            item: playingCard,
-//                            attachedToAnchor: CGPoint(
-//                                x: playingCard.frame.midX,
-//                                y: playingCard.frame.minY - 10))
-//                        topAttachmentBehavior.frequency = 1
-//                        topAttachmentBehavior.damping = 5
-//
-//                        let bottomAttachmentBehavior = UIAttachmentBehavior(
-//                            item: playingCard,
-//                            attachedToAnchor: CGPoint(
-//                                x: playingCard.frame.midX,
-//                                y: playingCard.frame.maxY + 10))
-//                        bottomAttachmentBehavior.frequency = 1
-//                        bottomAttachmentBehavior.damping = 5
-//
-//                        let pushBehavior = UIPushBehavior(
-//                            items: [playingCard],
-//                            mode: .instantaneous)
-//                        pushBehavior.pushDirection = CGVector(dx: 100, dy: 0)
-//
-//                        animator.addBehavior(topAttachmentBehavior)
-//                        animator.addBehavior(bottomAttachmentBehavior)
-//                        animator.addBehavior(pushBehavior)
                     }
                 }
 

@@ -75,16 +75,17 @@ struct SetGame {
     
     func findAMatch() -> Bool? {
         if selectedCards.count == 3 {
-            let card1 = selectedCards[0]
-            let card2 = selectedCards[1]
-            let card3 = selectedCards[2]
-            return ((card1.color == card2.color && card1.color == card3.color) || (card1.color != card2.color && card1.color != card3.color && card2.color != card3.color))
-            &&
-            ((card1.number == card2.number && card1.number == card3.number) || (card1.number != card2.number && card1.number != card3.number && card2.number != card3.number))
-            &&
-            ((card1.shading == card2.shading && card1.shading == card3.shading) || (card1.shading != card2.shading && card1.shading != card3.shading && card2.shading != card3.shading))
-            &&
-            ((card1.shape == card2.shape && card1.shape == card3.shape) || (card1.shape != card2.shape && card1.shape != card3.shape && card2.shape != card3.shape))
+            return true
+//            let card1 = selectedCards[0]
+//            let card2 = selectedCards[1]
+//            let card3 = selectedCards[2]
+//            return ((card1.color == card2.color && card1.color == card3.color) || (card1.color != card2.color && card1.color != card3.color && card2.color != card3.color))
+//            &&
+//            ((card1.number == card2.number && card1.number == card3.number) || (card1.number != card2.number && card1.number != card3.number && card2.number != card3.number))
+//            &&
+//            ((card1.shading == card2.shading && card1.shading == card3.shading) || (card1.shading != card2.shading && card1.shading != card3.shading && card2.shading != card3.shading))
+//            &&
+//            ((card1.shape == card2.shape && card1.shape == card3.shape) || (card1.shape != card2.shape && card1.shape != card3.shape && card2.shape != card3.shape))
         }
         return nil
     }
