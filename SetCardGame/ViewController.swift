@@ -13,6 +13,7 @@ class ViewController: UIViewController {
     var playingCardByCard = [Card:PlayingCard]()
     var cardByPlayingCard = [PlayingCard:Card]()
     var grid = Grid(layout: .aspectRatio(2/3))
+    lazy var animator = UIDynamicAnimator(referenceView: view)
 
     @IBOutlet weak var cardsContainer: UIView!
     override func viewDidLoad() {
@@ -151,6 +152,44 @@ class ViewController: UIViewController {
                 game.clearSelectedCards()
             } else {
                 let selectedCards = game.selectedCards
+                selectedCards.forEach { (card) in
+                    if let playingCard = playingCardByCard[card] {
+                        let animation = CABasicAnimation(keyPath: "position")
+                        animation.duration = 0.07
+                        animation.repeatCount = 3
+                        animation.autoreverses = true
+                        animation.fromValue = NSValue(cgPoint: CGPoint(x: playingCard.center.x - 10, y: playingCard.center.y))
+                        animation.toValue = NSValue(cgPoint: CGPoint(x: playingCard.center.x + 10, y: playingCard.center.y))
+
+                        playingCard.layer.add(animation, forKey: "position")
+                        
+//                        let topAttachmentBehavior = UIAttachmentBehavior(
+//                            item: playingCard,
+//                            attachedToAnchor: CGPoint(
+//                                x: playingCard.frame.midX,
+//                                y: playingCard.frame.minY - 10))
+//                        topAttachmentBehavior.frequency = 1
+//                        topAttachmentBehavior.damping = 5
+//
+//                        let bottomAttachmentBehavior = UIAttachmentBehavior(
+//                            item: playingCard,
+//                            attachedToAnchor: CGPoint(
+//                                x: playingCard.frame.midX,
+//                                y: playingCard.frame.maxY + 10))
+//                        bottomAttachmentBehavior.frequency = 1
+//                        bottomAttachmentBehavior.damping = 5
+//
+//                        let pushBehavior = UIPushBehavior(
+//                            items: [playingCard],
+//                            mode: .instantaneous)
+//                        pushBehavior.pushDirection = CGVector(dx: 100, dy: 0)
+//
+//                        animator.addBehavior(topAttachmentBehavior)
+//                        animator.addBehavior(bottomAttachmentBehavior)
+//                        animator.addBehavior(pushBehavior)
+                    }
+                }
+
                 game.clearSelectedCards()
                 updateViewFromModel(selectedCards)
             }
