@@ -22,7 +22,7 @@ class ConcentrationViewController: UIViewController {
 
     @IBAction func restartGame(_ sender: UIButton) {
         game = Concentration(numberOfPairsOfCards: (cardButtons.count + 1) / 2)
-        emojiChoices = themes[Int(arc4random_uniform(UInt32(themes.count)))]
+        emojiChoices = theme ?? []
         emoji = [Int:String]()
         updateViewFromModel()
     }
@@ -46,13 +46,14 @@ class ConcentrationViewController: UIViewController {
     
     @IBOutlet weak var flipCountLabel: UILabel!
     
+    var theme: [String]? {
+        didSet {
+            emojiChoices = theme ?? [] // array have value sematics in Swift
+            emoji = [:]
+        }
+    }
     
-    var themes: [[String]] = [
-        [ "😸", "🐶", "🐻", "🐨", "🐽", "🐝", "🐧", "🙈", "🦀" ],
-        [ "😃", "😂", "😍", "🤪", "😎", "🧐", "😡", "😵", "🥶" ],
-    ]
-
-    lazy var emojiChoices = themes[Int(arc4random_uniform(UInt32(themes.count)))]
+    var emojiChoices: [String] = []
     var emoji = [Int:String]()
     func emoji(for card: Card) -> String {
         if emoji[card.identifier] == nil, emojiChoices.count > 0 {
