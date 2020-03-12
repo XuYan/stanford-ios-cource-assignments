@@ -42,7 +42,7 @@ class ConcentrationViewController: UIViewController {
         flipCountLabel.text = "Flips:\(game.flipCount)"
     }
     
-    @IBOutlet var cardButtons: Array<UIButton>!
+    @IBOutlet var cardButtons: [UIButton]!
     
     @IBOutlet weak var flipCountLabel: UILabel!
     
