@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class ConcentrationViewController: UIViewController {
     lazy var game = Concentration(numberOfPairsOfCards: (cardButtons.count + 1) / 2)
 
     @IBAction func touchCard(_ sender: UIButton) {
@@ -22,7 +22,7 @@ class ViewController: UIViewController {
 
     @IBAction func restartGame(_ sender: UIButton) {
         game = Concentration(numberOfPairsOfCards: (cardButtons.count + 1) / 2)
-        emojiChoices = themes[Int(arc4random_uniform(UInt32(themes.count)))]
+        emojiChoices = theme ?? []
         emoji = [Int:String]()
         updateViewFromModel()
     }
@@ -36,23 +36,24 @@ class ViewController: UIViewController {
                 button.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
             } else {
                 button.setTitle("", for: UIControl.State.normal)
-                button.backgroundColor = card.isMatched ? #colorLiteral(red: 0.9372549057, green: 0.3490196168, blue: 0.1921568662, alpha: 0) : #colorLiteral(red: 0.9372549057, green: 0.3490196168, blue: 0.1921568662, alpha: 1)
+                button.backgroundColor = card.isMatched ? #colorLiteral(red: 0.9372549057, green: 0.3490196168, blue: 0.1921568662, alpha: 0) : #colorLiteral(red: 1, green: 0.5763723254, blue: 0, alpha: 1)
             }
         }
         flipCountLabel.text = "Flips:\(game.flipCount)"
     }
     
-    @IBOutlet var cardButtons: Array<UIButton>!
+    @IBOutlet var cardButtons: [UIButton]!
     
     @IBOutlet weak var flipCountLabel: UILabel!
     
+    var theme: [String]? {
+        didSet {
+            emojiChoices = theme ?? [] // array have value sematics in Swift
+            emoji = [:]
+        }
+    }
     
-    var themes: [[String]] = [
-        [ "😸", "🐶", "🐻", "🐨", "🐽", "🐝", "🐧", "🙈", "🦀" ],
-        [ "😃", "😂", "😍", "🤪", "😎", "🧐", "😡", "😵", "🥶" ],
-    ]
-
-    lazy var emojiChoices = themes[Int(arc4random_uniform(UInt32(themes.count)))]
+    var emojiChoices: [String] = []
     var emoji = [Int:String]()
     func emoji(for card: Card) -> String {
         if emoji[card.identifier] == nil, emojiChoices.count > 0 {

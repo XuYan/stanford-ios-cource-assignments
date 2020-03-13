@@ -7,9 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		85BF2A622419A38B00A127F3 /* ConcentrationThemeChooserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85BF2A612419A38B00A127F3 /* ConcentrationThemeChooserViewController.swift */; };
 		85EDD9422405A24A005586FF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85EDD9412405A24A005586FF /* AppDelegate.swift */; };
 		85EDD9442405A24A005586FF /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85EDD9432405A24A005586FF /* SceneDelegate.swift */; };
-		85EDD9462405A24A005586FF /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85EDD9452405A24A005586FF /* ViewController.swift */; };
+		85EDD9462405A24A005586FF /* ConcentrationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85EDD9452405A24A005586FF /* ConcentrationViewController.swift */; };
 		85EDD9492405A24A005586FF /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 85EDD9472405A24A005586FF /* Main.storyboard */; };
 		85EDD94B2405A24D005586FF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 85EDD94A2405A24D005586FF /* Assets.xcassets */; };
 		85EDD94E2405A24D005586FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 85EDD94C2405A24D005586FF /* LaunchScreen.storyboard */; };
@@ -18,10 +19,11 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		85BF2A612419A38B00A127F3 /* ConcentrationThemeChooserViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConcentrationThemeChooserViewController.swift; sourceTree = "<group>"; };
 		85EDD93E2405A24A005586FF /* Concentration.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Concentration.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		85EDD9412405A24A005586FF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		85EDD9432405A24A005586FF /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		85EDD9452405A24A005586FF /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		85EDD9452405A24A005586FF /* ConcentrationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConcentrationViewController.swift; sourceTree = "<group>"; };
 		85EDD9482405A24A005586FF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		85EDD94A2405A24D005586FF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		85EDD94D2405A24D005586FF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -63,9 +65,10 @@
 				85EDD9562405E035005586FF /* Concentration.swift */,
 				85EDD9582405E0D8005586FF /* Card.swift */,
 				85EDD9552405A25F005586FF /* Supporting Files */,
-				85EDD9452405A24A005586FF /* ViewController.swift */,
+				85EDD9452405A24A005586FF /* ConcentrationViewController.swift */,
 				85EDD9472405A24A005586FF /* Main.storyboard */,
 				85EDD94F2405A24D005586FF /* Info.plist */,
+				85BF2A612419A38B00A127F3 /* ConcentrationThemeChooserViewController.swift */,
 			);
 			path = Concentration;
 			sourceTree = "<group>";
@@ -152,10 +155,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				85EDD9462405A24A005586FF /* ViewController.swift in Sources */,
+				85EDD9462405A24A005586FF /* ConcentrationViewController.swift in Sources */,
 				85EDD9572405E035005586FF /* Concentration.swift in Sources */,
 				85EDD9592405E0D8005586FF /* Card.swift in Sources */,
 				85EDD9422405A24A005586FF /* AppDelegate.swift in Sources */,
+				85BF2A622419A38B00A127F3 /* ConcentrationThemeChooserViewController.swift in Sources */,
 				85EDD9442405A24A005586FF /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
