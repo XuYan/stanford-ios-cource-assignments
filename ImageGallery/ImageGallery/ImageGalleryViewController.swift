@@ -8,20 +8,17 @@
 
 import UIKit
 
-private let reuseIdentifier = "Cell"
+private let reuseIdentifier = "cell"
 
 class ImageGalleryViewController: UICollectionViewController, UIDropInteractionDelegate {
-    private var images: [UIImage] = []
-    private var imageFetcher: ImageFetcher!
+    private var gallery = Gallery()
+    private var imageWidth = 10
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
-
-        // Register cell classes
-        self.collectionView!.register(UICollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
 
         // Do any additional setup after loading the view.
         view.addInteraction(UIDropInteraction(delegate: self))
@@ -34,19 +31,34 @@ class ImageGalleryViewController: UICollectionViewController, UIDropInteractionD
     func dropInteraction(_ interaction: UIDropInteraction, sessionDidUpdate session: UIDropSession) -> UIDropProposal {
         return UIDropProposal(operation: .copy)
     }
-    
+
     func dropInteraction(_ interaction: UIDropInteraction, performDrop session: UIDropSession) {
-        imageFetcher = ImageFetcher() { (url, image) in
-            DispatchQueue.main.async {
-                self.images.append(image)
+        var draggedImageUrl: URL?
+        var draggedImage: UIImage?
+
+        session.loadObjects(ofClass: NSURL.self) { nsurls in
+            if let url = nsurls.first as? URL {
+                draggedImageUrl = url.imageURL
+                if let image = draggedImage {
+                    self.onImageDropped(url: url, aspectRatio: image.aspectRatio)
+                }
             }
         }
         
-        session.loadObjects(ofClass: NSURL.self) { nsurls in
-            if let url = nsurls.first as? URL {
-                self.imageFetcher.fetch(url)
+        session.loadObjects(ofClass: UIImage.self) { images in
+            if let image = images.first as? UIImage {
+                draggedImage = image
+                if let url = draggedImageUrl {
+                    self.onImageDropped(url: url, aspectRatio: image.aspectRatio)
+                }
             }
         }
+    }
+    
+    private func onImageDropped(url: URL, aspectRatio: Double) {
+        let image = GalleryImage(url: url, aspectRatio: aspectRatio)
+        self.gallery.images.append(image)
+        self.collectionView.reloadData()
     }
 
     /*
@@ -60,24 +72,33 @@ class ImageGalleryViewController: UICollectionViewController, UIDropInteractionD
     */
 
     // MARK: UICollectionViewDataSource
-
-    override func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 1
-    }
-
-
+    
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return images.count
+        return self.gallery.images.count
     }
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath)
-    
         // Configure the cell
+        if let galleryImageCell = cell as? GalleryImageCell {
+            DispatchQueue.global(qos: .userInitiated).async {
+                let url = self.gallery.url(at: indexPath)
+                print(url)
+                guard let imageData = try? Data(contentsOf: self.gallery.url(at: indexPath)) else {
+                    print("Fail to load image")
+                    return
+                }
+                
+                DispatchQueue.main.async {
+                    let imageView = UIImageView(image: UIImage(data: imageData))
+                    galleryImageCell.imageView = imageView
+                }
+            }
+        }
     
         return cell
     }
-
+    
     // MARK: UICollectionViewDelegate
 
     /*
@@ -109,4 +130,12 @@ class ImageGalleryViewController: UICollectionViewController, UIDropInteractionD
     }
     */
 
+}
+
+extension UIImage {
+    var aspectRatio: Double {
+        get {
+            return Double(size.width/size.height)
+        }
+    }
 }
