@@ -8,7 +8,7 @@
 
 import UIKit
 
-private let reuseIdentifier = "cell"
+private let reuseIdentifier = "GalleryImageCell"
 
 class ImageGalleryViewController: UICollectionViewController, UIDropInteractionDelegate {
     private var gallery = Gallery()
