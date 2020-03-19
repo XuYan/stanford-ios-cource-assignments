@@ -10,9 +10,9 @@ import UIKit
 
 private let reuseIdentifier = "GalleryImageCell"
 
-class ImageGalleryViewController: UICollectionViewController, UIDropInteractionDelegate {
+class ImageGalleryViewController: UICollectionViewController, UIDropInteractionDelegate, UICollectionViewDelegateFlowLayout {
     private var gallery = Gallery()
-    private var imageWidth = 10
+    private var galleryImageWidth = 200
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,7 +29,7 @@ class ImageGalleryViewController: UICollectionViewController, UIDropInteractionD
     }
     
     func dropInteraction(_ interaction: UIDropInteraction, sessionDidUpdate session: UIDropSession) -> UIDropProposal {
-        return UIDropProposal(operation: .copy)
+        return UICollectionViewDropProposal(operation: .copy, intent: .insertAtDestinationIndexPath)
     }
 
     func dropInteraction(_ interaction: UIDropInteraction, performDrop session: UIDropSession) {
@@ -82,8 +82,6 @@ class ImageGalleryViewController: UICollectionViewController, UIDropInteractionD
         // Configure the cell
         if let galleryImageCell = cell as? GalleryImageCell {
             DispatchQueue.global(qos: .userInitiated).async {
-                let url = self.gallery.url(at: indexPath)
-                print(url)
                 guard let imageData = try? Data(contentsOf: self.gallery.url(at: indexPath)) else {
                     print("Fail to load image")
                     return
@@ -91,12 +89,19 @@ class ImageGalleryViewController: UICollectionViewController, UIDropInteractionD
                 
                 DispatchQueue.main.async {
                     let imageView = UIImageView(image: UIImage(data: imageData))
+                    imageView.frame = CGRect(x: 0, y: 0, width: Double(self.galleryImageWidth), height: Double(self.galleryImageWidth) / self.gallery.aspectRatio(at: indexPath))
                     galleryImageCell.imageView = imageView
                 }
             }
         }
     
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let cellWidth = Double(galleryImageWidth)
+        let cellHeight = cellWidth / self.gallery.aspectRatio(at: indexPath)
+        return CGSize(width: cellWidth, height: cellHeight)
     }
     
     // MARK: UICollectionViewDelegate

@@ -14,6 +14,10 @@ struct Gallery {
     func url(at indexPath: IndexPath) -> URL {
         return images[indexPath.item].url
     }
+    
+    func aspectRatio(at indexPath: IndexPath) -> Double {
+        return images[indexPath.item].aspectRatio
+    }
 }
 
 struct GalleryImage {
