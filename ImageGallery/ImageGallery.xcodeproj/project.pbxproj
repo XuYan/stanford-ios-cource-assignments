@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8517CCED2426C6CD0034C5A8 /* GalleryTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8517CCEC2426C6CD0034C5A8 /* GalleryTableViewController.swift */; };
 		85B7355D242144700039CFE2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85B7355C242144700039CFE2 /* AppDelegate.swift */; };
 		85B7355F242144700039CFE2 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85B7355E242144700039CFE2 /* SceneDelegate.swift */; };
 		85B73564242144700039CFE2 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 85B73562242144700039CFE2 /* Main.storyboard */; };
@@ -19,6 +20,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		8517CCEC2426C6CD0034C5A8 /* GalleryTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GalleryTableViewController.swift; sourceTree = "<group>"; };
 		85B73559242144700039CFE2 /* ImageGallery.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ImageGallery.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		85B7355C242144700039CFE2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		85B7355E242144700039CFE2 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -62,6 +64,7 @@
 		85B7355B242144700039CFE2 /* ImageGallery */ = {
 			isa = PBXGroup;
 			children = (
+				8517CCEC2426C6CD0034C5A8 /* GalleryTableViewController.swift */,
 				85B735752421EB340039CFE2 /* Model.swift */,
 				85B7356A242144730039CFE2 /* Info.plist */,
 				85B735702421448C0039CFE2 /* Supporting Files */,
@@ -161,6 +164,7 @@
 				85B7357424219BDF0039CFE2 /* Utilities.swift in Sources */,
 				85B73578242295700039CFE2 /* GalleryImageCell.swift in Sources */,
 				85B7355F242144700039CFE2 /* SceneDelegate.swift in Sources */,
+				8517CCED2426C6CD0034C5A8 /* GalleryTableViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

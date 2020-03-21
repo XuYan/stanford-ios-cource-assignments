@@ -8,9 +8,20 @@
 
 import Foundation
 
-struct Gallery {
-    var images: [GalleryImage] = []
+struct App {
+    var currentGalleries: [Gallery]
+    var recentlyDeletedGalleries: [Gallery]
     
+    func gallery(at indexPath: IndexPath) -> Gallery {
+        let galleries = indexPath.section == 0 ? currentGalleries : recentlyDeletedGalleries
+        return galleries[indexPath.row]
+    }
+}
+
+struct Gallery {
+    var title = "test"
+    var images: [GalleryImage] = []
+
     func url(at indexPath: IndexPath) -> URL {
         return images[indexPath.item].url
     }

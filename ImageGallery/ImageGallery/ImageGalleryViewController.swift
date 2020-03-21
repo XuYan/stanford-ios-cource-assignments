@@ -12,7 +12,7 @@ private let imageCellReuseId = "GalleryImageCell"
 private let placeholderCellReuseId = "GalleryImagePlaceholderCell"
 
 class ImageGalleryViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout, UICollectionViewDropDelegate {
-    private var gallery = Gallery()
+    var gallery = Gallery()
     private var galleryImageWidth = 300.0
     private var flowLayout: UICollectionViewFlowLayout? {
         return collectionView?.collectionViewLayout as? UICollectionViewFlowLayout
@@ -138,7 +138,6 @@ class ImageGalleryViewController: UICollectionViewController, UICollectionViewDe
     }
     
     @objc private func scale(recognizer: UIPinchGestureRecognizer) {
-        print("scaling")
         if recognizer.state == .began || recognizer.state == .changed {
             galleryImageWidth = galleryImageWidth * Double(recognizer.scale)
             collectionView.reloadData()
