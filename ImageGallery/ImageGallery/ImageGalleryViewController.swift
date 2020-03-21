@@ -13,12 +13,16 @@ private let placeholderCellReuseId = "GalleryImagePlaceholderCell"
 
 class ImageGalleryViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout, UICollectionViewDropDelegate {
     private var gallery = Gallery()
-    private var galleryImageWidth = 300
+    private var galleryImageWidth = 300.0
+    private var flowLayout: UICollectionViewFlowLayout? {
+        return collectionView?.collectionViewLayout as? UICollectionViewFlowLayout
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         self.collectionView.dropDelegate = self
+        registerGestures()
     }
 
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -126,6 +130,21 @@ class ImageGalleryViewController: UICollectionViewController, UICollectionViewDe
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return 1.0
+    }
+    
+    private func registerGestures() {
+        let pinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(scale(recognizer:)))
+        collectionView.addGestureRecognizer(pinchGesture)
+    }
+    
+    @objc private func scale(recognizer: UIPinchGestureRecognizer) {
+        print("scaling")
+        if recognizer.state == .began || recognizer.state == .changed {
+            galleryImageWidth = galleryImageWidth * Double(recognizer.scale)
+            collectionView.reloadData()
+            flowLayout?.invalidateLayout()
+            recognizer.scale = 1.0
+        }
     }
 }
 
