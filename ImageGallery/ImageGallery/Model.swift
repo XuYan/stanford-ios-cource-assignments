@@ -18,9 +18,18 @@ struct Gallery {
     func aspectRatio(at indexPath: IndexPath) -> Double {
         return images[indexPath.item].aspectRatio
     }
+    
+    func data(at indexPath: IndexPath) -> Data {
+        return images[indexPath.item].data
+    }
+    
+    mutating func insert(_ image: GalleryImage, at: IndexPath) {
+        images.insert(image, at: at.item)
+    }
 }
 
 struct GalleryImage {
     var url: URL
     var aspectRatio: Double
+    var data: Data
 }

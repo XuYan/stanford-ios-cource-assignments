@@ -10,9 +10,5 @@ import UIKit
 
 class GalleryImageCell: UICollectionViewCell {
     
-    @IBOutlet weak var imageView: UIImageView! {
-        didSet {
-            self.addSubview(imageView)
-        }
-    }
+    @IBOutlet weak var imageView: UIImageView!
 }

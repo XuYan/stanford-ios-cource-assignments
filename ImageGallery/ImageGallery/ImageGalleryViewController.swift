@@ -8,94 +8,110 @@
 
 import UIKit
 
-private let reuseIdentifier = "GalleryImageCell"
+private let imageCellReuseId = "GalleryImageCell"
+private let placeholderCellReuseId = "GalleryImagePlaceholderCell"
 
-class ImageGalleryViewController: UICollectionViewController, UIDropInteractionDelegate, UICollectionViewDelegateFlowLayout {
+class ImageGalleryViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout, UICollectionViewDropDelegate {
     private var gallery = Gallery()
-    private var galleryImageWidth = 200
+    private var galleryImageWidth = 300
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Do any additional setup after loading the view.
-        view.addInteraction(UIDropInteraction(delegate: self))
+        self.collectionView.dropDelegate = self
     }
 
-    func dropInteraction(_ interaction: UIDropInteraction, canHandle session: UIDropSession) -> Bool {
-        return session.canLoadObjects(ofClass: UIImage.self) && session.canLoadObjects(ofClass: NSURL.self)
-    }
-    
-    func dropInteraction(_ interaction: UIDropInteraction, sessionDidUpdate session: UIDropSession) -> UIDropProposal {
-        return UICollectionViewDropProposal(operation: .copy, intent: .insertAtDestinationIndexPath)
-    }
-
-    func dropInteraction(_ interaction: UIDropInteraction, performDrop session: UIDropSession) {
-        var draggedImageUrl: URL?
-        var draggedImage: UIImage?
-
-        session.loadObjects(ofClass: NSURL.self) { nsurls in
-            if let url = nsurls.first as? URL {
-                draggedImageUrl = url.imageURL
-                if let image = draggedImage {
-                    self.onImageDropped(url: url, aspectRatio: image.aspectRatio)
-                }
-            }
-        }
-        
-        session.loadObjects(ofClass: UIImage.self) { images in
-            if let image = images.first as? UIImage {
-                draggedImage = image
-                if let url = draggedImageUrl {
-                    self.onImageDropped(url: url, aspectRatio: image.aspectRatio)
-                }
-            }
-        }
-    }
-    
-    private func onImageDropped(url: URL, aspectRatio: Double) {
-        let image = GalleryImage(url: url, aspectRatio: aspectRatio)
-        self.gallery.images.append(image)
-        self.collectionView.reloadData()
-    }
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using [segue destinationViewController].
-        // Pass the selected object to the new view controller.
-    }
-    */
-
-    // MARK: UICollectionViewDataSource
-    
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return self.gallery.images.count
     }
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath)
-        // Configure the cell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: imageCellReuseId, for: indexPath)
         if let galleryImageCell = cell as? GalleryImageCell {
-            DispatchQueue.global(qos: .userInitiated).async {
-                guard let imageData = try? Data(contentsOf: self.gallery.url(at: indexPath)) else {
-                    print("Fail to load image")
-                    return
-                }
-                
                 DispatchQueue.main.async {
-                    let imageView = UIImageView(image: UIImage(data: imageData))
+                    let imageView = UIImageView(image: UIImage(data: self.gallery.data(at: indexPath)))
                     imageView.frame = CGRect(x: 0, y: 0, width: Double(self.galleryImageWidth), height: Double(self.galleryImageWidth) / self.gallery.aspectRatio(at: indexPath))
-                    galleryImageCell.imageView = imageView
+                    galleryImageCell.addSubview(imageView)
                 }
-            }
         }
     
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, canHandle session: UIDropSession) -> Bool {
+        return session.canLoadObjects(ofClass: UIImage.self) && session.canLoadObjects(ofClass: NSURL.self)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, dropSessionDidUpdate session: UIDropSession, withDestinationIndexPath destinationIndexPath: IndexPath?) -> UICollectionViewDropProposal {
+        return UICollectionViewDropProposal(operation: .copy, intent: .insertAtDestinationIndexPath)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, performDropWith coordinator: UICollectionViewDropCoordinator) {
+        let destinationIndexPath = coordinator.destinationIndexPath ?? IndexPath(item: self.gallery.images.count, section: 0)
+        for item in coordinator.items {
+            var draggedImage: UIImage? = nil
+            var draggedUrl: URL? = nil
+
+            let placeholderContext = coordinator.drop(
+                item.dragItem,
+                to: UICollectionViewDropPlaceholder(
+                    insertionIndexPath: destinationIndexPath,
+                    reuseIdentifier: placeholderCellReuseId
+                )
+            )
+            let itemProvider = item.dragItem.itemProvider
+            itemProvider.loadObject(ofClass: UIImage.self) { (provider, error) in
+                if let image = provider as? UIImage {
+                    draggedImage = image
+                    if draggedUrl != nil {
+                        self.onLoadCompleted(
+                            context: placeholderContext,
+                            url: draggedUrl!,
+                            aspectRatio: draggedImage!.aspectRatio
+                        )
+                    }
+                } else {
+                    self.onLoadFailed(context: placeholderContext)
+                }
+            }
+            itemProvider.loadObject(ofClass: NSURL.self) { (provider, error) in
+                if let url = provider as? URL {
+                    draggedUrl = url.imageURL
+                    if draggedImage != nil {
+                        self.onLoadCompleted(
+                            context: placeholderContext,
+                            url: draggedUrl!,
+                            aspectRatio: draggedImage!.aspectRatio
+                        )
+                    }
+                } else {
+                    self.onLoadFailed(context: placeholderContext)
+                }
+            }
+        }
+    }
+    
+    private func onLoadCompleted(
+        context: UICollectionViewDropPlaceholderContext,
+        url: URL,
+        aspectRatio: Double
+    ) {
+        guard let data = try? Data(contentsOf: url) else {
+            print("Fail to load image")
+            return
+        }
+        let image = GalleryImage(url: url, aspectRatio: aspectRatio, data: data)
+        DispatchQueue.main.async {
+            context.commitInsertion { insertionIndexPath in
+                self.gallery.insert(image, at: insertionIndexPath)
+            }
+        }
+    }
+    
+    private func onLoadFailed(context: UICollectionViewDropPlaceholderContext) {
+        DispatchQueue.main.async {
+            context.deletePlaceholder()
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -104,37 +120,13 @@ class ImageGalleryViewController: UICollectionViewController, UIDropInteractionD
         return CGSize(width: cellWidth, height: cellHeight)
     }
     
-    // MARK: UICollectionViewDelegate
-
-    /*
-    // Uncomment this method to specify if the specified item should be highlighted during tracking
-    override func collectionView(_ collectionView: UICollectionView, shouldHighlightItemAt indexPath: IndexPath) -> Bool {
-        return true
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        return 1.0
     }
-    */
-
-    /*
-    // Uncomment this method to specify if the specified item should be selected
-    override func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
-        return true
-    }
-    */
-
-    /*
-    // Uncomment these methods to specify if an action menu should be displayed for the specified item, and react to actions performed on the item
-    override func collectionView(_ collectionView: UICollectionView, shouldShowMenuForItemAt indexPath: IndexPath) -> Bool {
-        return false
-    }
-
-    override func collectionView(_ collectionView: UICollectionView, canPerformAction action: Selector, forItemAt indexPath: IndexPath, withSender sender: Any?) -> Bool {
-        return false
-    }
-
-    override func collectionView(_ collectionView: UICollectionView, performAction action: Selector, forItemAt indexPath: IndexPath, withSender sender: Any?) {
     
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 1.0
     }
-    */
-
 }
 
 extension UIImage {
