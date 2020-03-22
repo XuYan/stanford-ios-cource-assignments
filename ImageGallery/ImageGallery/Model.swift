@@ -28,6 +28,14 @@ struct App {
         let existingGalleryTitles = currentGalleries.map { $0.title }
         currentGalleries += [ Gallery(title: "untitled".madeUnique(withRespectTo: existingGalleryTitles)) ]
     }
+    
+    mutating func removeGallery(at: IndexPath) {
+        if at.section == 0 {
+            currentGalleries.remove(at: at.row)
+            return
+        }
+        recentlyDeletedGalleries.remove(at: at.row)
+    }
 }
 
 class Gallery {

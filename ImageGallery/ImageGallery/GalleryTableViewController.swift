@@ -49,6 +49,13 @@ class GalleryTableViewController: UITableViewController {
         return section == 0 ? "Current" : "Recently Deleted"
     }
     
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            app.removeGallery(at: indexPath)
+            tableView.deleteRows(at: [indexPath], with: .fade)
+        }
+    }
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "ShowGallery" {
             if let indexPath = tableView.indexPathForSelectedRow {
