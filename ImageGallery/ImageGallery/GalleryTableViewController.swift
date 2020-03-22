@@ -33,7 +33,7 @@ class GalleryTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return section == 0
+        return app.isOperationOnCurrentSection(at: section)
             ? app.currentGalleries.count
             : app.recentlyDeletedGalleries.count
     }
@@ -46,7 +46,7 @@ class GalleryTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return section == 0 ? "Current" : "Recently Deleted"
+        return app.isOperationOnCurrentSection(at: section) ? "Current" : "Recently Deleted"
     }
     
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
@@ -54,16 +54,17 @@ class GalleryTableViewController: UITableViewController {
             let gallery = app.removeGallery(at: indexPath)
             tableView.deleteRows(at: [indexPath], with: .fade)
             
-            if indexPath.section == 0 {
+            if app.isOperationOnCurrentSection(at: indexPath) {
                 app.addToRecentlyDeletedGalleries(gallery)
                 tableView.insertRows(at: [IndexPath(row: 0, section: 1)], with: .automatic)
             }
         }
     }
     
+
     override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
         if identifier == "ShowGallery", let indexPath = tableView.indexPathForSelectedRow {
-            return indexPath.section == 0
+            return app.isOperationOnCurrentSection(at: indexPath)
         }
         return false
     }

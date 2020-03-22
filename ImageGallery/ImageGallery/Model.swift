@@ -12,16 +12,13 @@ struct App {
     var currentGalleries: [Gallery]
     var recentlyDeletedGalleries: [Gallery]
     
-    func gallery(at indexPath: IndexPath) -> Gallery {
-        let galleries = indexPath.section == 0 ? currentGalleries : recentlyDeletedGalleries
-        return galleries[indexPath.row]
+    func gallery(at: IndexPath) -> Gallery {
+        let galleries = isOperationOnCurrentSection(at: at) ? currentGalleries : recentlyDeletedGalleries
+        return galleries[at.row]
     }
     
-    func getCurrentGallery(at indexPath: IndexPath) -> Gallery? {
-        if indexPath.section == 1 {
-            return nil
-        }
-        return currentGalleries[indexPath.row]
+    func getCurrentGallery(at: IndexPath) -> Gallery? {
+        return isOperationOnCurrentSection(at: at) ? currentGalleries[at.row] : nil
     }
     
     mutating func addNewGallery() {
@@ -34,10 +31,18 @@ struct App {
     }
 
     mutating func removeGallery(at: IndexPath) -> Gallery {
-        if at.section == 0 {
+        if isOperationOnCurrentSection(at: at) {
             return currentGalleries.remove(at: at.row)
         }
         return recentlyDeletedGalleries.remove(at: at.row)
+    }
+    
+    func isOperationOnCurrentSection(at: IndexPath) -> Bool {
+        return at.section == 0
+    }
+    
+    func isOperationOnCurrentSection(at: Int) -> Bool {
+        return at == 0
     }
 }
 
