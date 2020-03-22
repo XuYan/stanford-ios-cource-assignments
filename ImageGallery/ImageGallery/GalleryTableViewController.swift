@@ -23,6 +23,11 @@ class GalleryTableViewController: UITableViewController {
         performSegue(withIdentifier: "ShowGallery", sender: at)
     }
 
+    @IBAction func addNewGallery(_ sender: UIButton) {
+        app.addNewGallery()
+        tableView.reloadData()
+    }
+    
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 2
     }

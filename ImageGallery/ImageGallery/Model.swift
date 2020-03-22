@@ -23,6 +23,11 @@ struct App {
         }
         return currentGalleries[indexPath.row]
     }
+    
+    mutating func addNewGallery() {
+        let existingGalleryTitles = currentGalleries.map { $0.title }
+        currentGalleries += [ Gallery(title: "untitled".madeUnique(withRespectTo: existingGalleryTitles)) ]
+    }
 }
 
 class Gallery {
