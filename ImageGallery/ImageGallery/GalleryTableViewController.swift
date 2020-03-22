@@ -61,6 +61,13 @@ class GalleryTableViewController: UITableViewController {
         }
     }
     
+    override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
+        if identifier == "ShowGallery", let indexPath = tableView.indexPathForSelectedRow {
+            return indexPath.section == 0
+        }
+        return false
+    }
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "ShowGallery" {
             if let indexPath = tableView.indexPathForSelectedRow {
