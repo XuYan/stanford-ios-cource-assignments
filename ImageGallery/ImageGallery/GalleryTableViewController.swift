@@ -11,8 +11,13 @@ import UIKit
 class GalleryTableViewController: UITableViewController {
     var app = App(currentGalleries: [ Gallery() ], recentlyDeletedGalleries: [ Gallery() ])
 
+    @IBOutlet weak var tableHeaderLabel: UILabel!
+    @IBOutlet weak var addGalleryBtn: UIButton!
+
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        tableHeaderLabel.text = "Galleries"
 
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
@@ -39,7 +44,11 @@ class GalleryTableViewController: UITableViewController {
 
         return cell
     }
-
+    
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return section == 0 ? "Current" : "Recently Deleted"
+    }
+    
     /*
     // Override to support conditional editing of the table view.
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
