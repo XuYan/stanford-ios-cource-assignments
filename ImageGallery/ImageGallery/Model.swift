@@ -16,11 +16,23 @@ struct App {
         let galleries = indexPath.section == 0 ? currentGalleries : recentlyDeletedGalleries
         return galleries[indexPath.row]
     }
+    
+    func getCurrentGallery(at indexPath: IndexPath) -> Gallery? {
+        if indexPath.section == 1 {
+            return nil
+        }
+        return currentGalleries[indexPath.row]
+    }
 }
 
-struct Gallery {
-    var title = "test"
-    var images: [GalleryImage] = []
+class Gallery {
+    var title: String
+    var images: [GalleryImage]
+    
+    init(title: String?) {
+        self.title = title ?? ""
+        self.images = []
+    }
 
     func url(at indexPath: IndexPath) -> URL {
         return images[indexPath.item].url
@@ -34,7 +46,7 @@ struct Gallery {
         return images[indexPath.item].data
     }
     
-    mutating func insert(_ image: GalleryImage, at: IndexPath) {
+    func insert(_ image: GalleryImage, at: IndexPath) {
         images.insert(image, at: at.item)
     }
 }

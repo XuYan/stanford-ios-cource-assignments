@@ -9,10 +9,19 @@
 import UIKit
 
 class GalleryTableViewController: UITableViewController {
-    var app = App(currentGalleries: [ Gallery() ], recentlyDeletedGalleries: [ Gallery() ])
+    var app = App(currentGalleries: [ Gallery(title: "G1"), Gallery(title: "G2") ], recentlyDeletedGalleries: [])
 
     @IBOutlet weak var tableHeaderLabel: UILabel!
     @IBOutlet weak var addGalleryBtn: UIButton!
+    
+    override func viewDidLoad() {
+        select(at: IndexPath(row: 0, section: 0))
+    }
+    
+    private func select(at: IndexPath) {
+        tableView.selectRow(at: at, animated: true, scrollPosition: .none)
+        performSegue(withIdentifier: "ShowGallery", sender: at)
+    }
 
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 2
@@ -36,7 +45,14 @@ class GalleryTableViewController: UITableViewController {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+        if segue.identifier == "ShowGallery" {
+            if let indexPath = tableView.indexPathForSelectedRow {
+                if let gallery = app.getCurrentGallery(at: indexPath) {
+                    if let galleryVC = segue.destination as? ImageGalleryViewController {
+                        galleryVC.gallery = gallery
+                    }
+                }
+            }
+        }
     }
 }

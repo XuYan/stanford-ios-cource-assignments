@@ -12,7 +12,7 @@ private let imageCellReuseId = "GalleryImageCell"
 private let placeholderCellReuseId = "GalleryImagePlaceholderCell"
 
 class ImageGalleryViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout, UICollectionViewDropDelegate {
-    var gallery = Gallery()
+    var gallery: Gallery!
     private var galleryImageWidth = 300.0
     private var flowLayout: UICollectionViewFlowLayout? {
         return collectionView?.collectionViewLayout as? UICollectionViewFlowLayout
@@ -26,7 +26,10 @@ class ImageGalleryViewController: UICollectionViewController, UICollectionViewDe
     }
 
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.gallery.images.count
+        if gallery == nil {
+            return 0
+        }
+        return gallery.images.count
     }
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -43,7 +46,7 @@ class ImageGalleryViewController: UICollectionViewController, UICollectionViewDe
     }
     
     func collectionView(_ collectionView: UICollectionView, canHandle session: UIDropSession) -> Bool {
-        return session.canLoadObjects(ofClass: UIImage.self) && session.canLoadObjects(ofClass: NSURL.self)
+        return gallery != nil && session.canLoadObjects(ofClass: UIImage.self) && session.canLoadObjects(ofClass: NSURL.self)
     }
     
     func collectionView(_ collectionView: UICollectionView, dropSessionDidUpdate session: UIDropSession, withDestinationIndexPath destinationIndexPath: IndexPath?) -> UICollectionViewDropProposal {
