@@ -78,7 +78,7 @@
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="J1N-YB-gHf" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1152.5390625" y="114.84375"/>
+            <point key="canvasLocation" x="1861" y="5"/>
         </scene>
         <!--Gallery Table View Controller-->
         <scene sceneID="VEZ-8U-Lxx">
@@ -96,8 +96,8 @@
                                     <rect key="frame" x="282" y="11" width="18" height="22"/>
                                     <state key="normal" image="plus" catalog="system"/>
                                 </button>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nup-cd-x5r">
-                                    <rect key="frame" x="20" y="4" width="71" height="36"/>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Galleries" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nup-cd-x5r">
+                                    <rect key="frame" x="20" y="4" width="112" height="36"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="30"/>
                                     <nil key="textColor"/>
                                     <nil key="highlightedColor"/>
@@ -129,6 +129,9 @@
                                         </label>
                                     </subviews>
                                 </tableViewCellContentView>
+                                <connections>
+                                    <segue destination="uDu-hm-q0n" kind="showDetail" identifier="ShowGallery" id="iHB-7y-kwz"/>
+                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <connections>
@@ -145,7 +148,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="P2r-xO-aqz" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1153" y="866"/>
+            <point key="canvasLocation" x="567" y="1003"/>
         </scene>
         <!--Split View Controller-->
         <scene sceneID="tEX-TQ-0zU">
@@ -158,10 +161,13 @@
                 </splitViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="h5e-jR-TC3" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="381" y="480"/>
+            <point key="canvasLocation" x="567" y="5"/>
         </scene>
     </scenes>
     <resources>
         <image name="plus" catalog="system" width="64" height="56"/>
     </resources>
+    <inferredMetricsTieBreakers>
+        <segue reference="iHB-7y-kwz"/>
+    </inferredMetricsTieBreakers>
 </document>
