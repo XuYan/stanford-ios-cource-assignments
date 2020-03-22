@@ -29,12 +29,15 @@ struct App {
         currentGalleries += [ Gallery(title: "untitled".madeUnique(withRespectTo: existingGalleryTitles)) ]
     }
     
-    mutating func removeGallery(at: IndexPath) {
+    mutating func addToRecentlyDeletedGalleries(_ gallery: Gallery) {
+        recentlyDeletedGalleries.insert(gallery, at: 0)
+    }
+
+    mutating func removeGallery(at: IndexPath) -> Gallery {
         if at.section == 0 {
-            currentGalleries.remove(at: at.row)
-            return
+            return currentGalleries.remove(at: at.row)
         }
-        recentlyDeletedGalleries.remove(at: at.row)
+        return recentlyDeletedGalleries.remove(at: at.row)
     }
 }
 

@@ -51,8 +51,13 @@ class GalleryTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            app.removeGallery(at: indexPath)
+            let gallery = app.removeGallery(at: indexPath)
             tableView.deleteRows(at: [indexPath], with: .fade)
+            
+            if indexPath.section == 0 {
+                app.addToRecentlyDeletedGalleries(gallery)
+                tableView.insertRows(at: [IndexPath(row: 0, section: 1)], with: .automatic)
+            }
         }
     }
     
