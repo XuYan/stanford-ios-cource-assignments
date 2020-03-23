@@ -8,6 +8,7 @@
 
 import Foundation
 
+
 struct App {
     var currentGalleries: [Gallery]
     var recentlyDeletedGalleries: [Gallery]
@@ -24,6 +25,10 @@ struct App {
     mutating func addNewGallery() {
         let existingGalleryTitles = currentGalleries.map { $0.title }
         currentGalleries += [ Gallery(title: "untitled".madeUnique(withRespectTo: existingGalleryTitles)) ]
+    }
+    
+    mutating func addToCurrentGalleries(_ gallery: Gallery) {
+        currentGalleries.insert(gallery, at: 0)
     }
     
     mutating func addToRecentlyDeletedGalleries(_ gallery: Gallery) {

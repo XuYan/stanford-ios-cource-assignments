@@ -61,7 +61,25 @@ class GalleryTableViewController: UITableViewController {
         }
     }
     
+    override func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        if app.isOperationOnCurrentSection(at: indexPath) {
+            return nil
+        }
 
+        let action = UIContextualAction(style: .normal, title: "undelete") { (action, view, completionHandler) in
+            let gallery = self.app.removeGallery(at: indexPath)
+            tableView.deleteRows(at: [indexPath], with: .fade)
+            
+            self.app.addToCurrentGalleries(gallery)
+            tableView.insertRows(at: [IndexPath(row: 0, section: 0)], with: .automatic)
+            
+            completionHandler(true)
+        }
+        
+        
+        return UISwipeActionsConfiguration(actions: [action])
+    }
+    
     override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
         if identifier == "ShowGallery", let indexPath = tableView.indexPathForSelectedRow {
             return app.isOperationOnCurrentSection(at: indexPath)
