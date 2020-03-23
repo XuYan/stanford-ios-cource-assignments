@@ -15,7 +15,7 @@ class GalleryTableViewController: UITableViewController {
     @IBOutlet weak var addGalleryBtn: UIButton!
     
     override func viewDidLoad() {
-        select(at: IndexPath(row: 0, section: 0))
+        select(at: CURRENTTOP)
     }
     
     private func select(at: IndexPath) {
@@ -56,7 +56,7 @@ class GalleryTableViewController: UITableViewController {
             
             if app.isOperationOnCurrentSection(at: indexPath) {
                 app.addToRecentlyDeletedGalleries(gallery)
-                tableView.insertRows(at: [IndexPath(row: 0, section: 1)], with: .automatic)
+                tableView.insertRows(at: [DELETETOP], with: .automatic)
             }
         }
     }
@@ -71,7 +71,7 @@ class GalleryTableViewController: UITableViewController {
             tableView.deleteRows(at: [indexPath], with: .fade)
             
             self.app.addToCurrentGalleries(gallery)
-            tableView.insertRows(at: [IndexPath(row: 0, section: 0)], with: .automatic)
+            tableView.insertRows(at: [CURRENTTOP], with: .automatic)
             
             completionHandler(true)
         }

@@ -8,6 +8,8 @@
 
 import Foundation
 
+let CURRENTTOP: IndexPath = IndexPath(row: 0, section: 0)
+let DELETETOP: IndexPath = IndexPath(row: 0, section: 1)
 
 struct App {
     var currentGalleries: [Gallery]
