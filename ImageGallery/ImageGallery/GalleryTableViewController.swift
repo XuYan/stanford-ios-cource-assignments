@@ -8,22 +8,19 @@
 
 import UIKit
 
-class GalleryTableViewController: UITableViewController, UIGestureRecognizerDelegate {
+class GalleryTableViewController: UITableViewController, UIGestureRecognizerDelegate, TappableCell {
     @IBOutlet weak var tableHeaderLabel: UILabel!
     @IBOutlet weak var addGalleryBtn: UIButton!
     
     var app = App(currentGalleries: [ Gallery(title: "G1"), Gallery(title: "G2") ], recentlyDeletedGalleries: [])
-    var singleTap: UITapGestureRecognizer!
-    var doubleTap: UITapGestureRecognizer!
 
     override func viewDidLoad() {
-        initGestureRecognizers()
         select(at: CURRENTTOP)
     }
     
     private func select(at: IndexPath) {
         tableView.selectRow(at: at, animated: true, scrollPosition: .none)
-        performSegue(withIdentifier: "ShowGallery", sender: at)
+        performSegue(withIdentifier: "ShowGallery", sender: nil)
     }
 
     @IBAction func addNewGallery(_ sender: UIButton) {
@@ -85,6 +82,10 @@ class GalleryTableViewController: UITableViewController, UIGestureRecognizerDele
         
         return UISwipeActionsConfiguration(actions: [action])
     }
+
+    func cellSingleTapped() {
+        performSegue(withIdentifier: "ShowGallery", sender: nil)
+    }
     
     override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
         if identifier == "ShowGallery", let indexPath = tableView.indexPathForSelectedRow {
@@ -94,6 +95,7 @@ class GalleryTableViewController: UITableViewController, UIGestureRecognizerDele
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        print("here")
         if segue.identifier == "ShowGallery" {
             if let indexPath = tableView.indexPathForSelectedRow {
                 if let gallery = app.getCurrentGallery(at: indexPath) {
@@ -103,29 +105,5 @@ class GalleryTableViewController: UITableViewController, UIGestureRecognizerDele
                 }
             }
         }
-    }
-    
-    private func initGestureRecognizers() {
-        self.singleTap = UITapGestureRecognizer(target: self, action: #selector(self.showGallery(recognizer:)))
-        self.singleTap.numberOfTapsRequired = 1
-        view.addGestureRecognizer(singleTap)
-        singleTap.delegate = self
-
-        self.doubleTap = UITapGestureRecognizer(target: self, action: #selector(self.editGalleryName(recognizer:)))
-        self.doubleTap.numberOfTapsRequired = 2
-        view.addGestureRecognizer(doubleTap)
-        doubleTap.delegate = self
-    }
-
-    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRequireFailureOf otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        return gestureRecognizer == self.singleTap && otherGestureRecognizer == self.doubleTap
-    }
-
-    @objc private func showGallery(recognizer: UITapGestureRecognizer) {
-        print("show gallery")
-    }
-    
-    @objc private func editGalleryName(recognizer: UITapGestureRecognizer) {
-        print("edit gallery name")
     }
 }
