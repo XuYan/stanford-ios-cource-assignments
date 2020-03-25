@@ -8,13 +8,16 @@
 
 import UIKit
 
-class GalleryTableViewController: UITableViewController {
-    var app = App(currentGalleries: [ Gallery(title: "G1"), Gallery(title: "G2") ], recentlyDeletedGalleries: [])
-
+class GalleryTableViewController: UITableViewController, UIGestureRecognizerDelegate {
     @IBOutlet weak var tableHeaderLabel: UILabel!
     @IBOutlet weak var addGalleryBtn: UIButton!
     
+    var app = App(currentGalleries: [ Gallery(title: "G1"), Gallery(title: "G2") ], recentlyDeletedGalleries: [])
+    var singleTap: UITapGestureRecognizer!
+    var doubleTap: UITapGestureRecognizer!
+
     override func viewDidLoad() {
+        initGestureRecognizers()
         select(at: CURRENTTOP)
     }
     
@@ -40,7 +43,10 @@ class GalleryTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "TableCell", for: indexPath)
-        cell.textLabel?.text = app.gallery(at: indexPath).title
+        if let galleryCell = cell as? TableCellTableViewCell {
+            galleryCell.name.isEnabled = false
+            galleryCell.name.text = app.gallery(at: indexPath).title
+        }
 
         return cell
     }
@@ -97,5 +103,29 @@ class GalleryTableViewController: UITableViewController {
                 }
             }
         }
+    }
+    
+    private func initGestureRecognizers() {
+        self.singleTap = UITapGestureRecognizer(target: self, action: #selector(self.showGallery(recognizer:)))
+        self.singleTap.numberOfTapsRequired = 1
+        view.addGestureRecognizer(singleTap)
+        singleTap.delegate = self
+
+        self.doubleTap = UITapGestureRecognizer(target: self, action: #selector(self.editGalleryName(recognizer:)))
+        self.doubleTap.numberOfTapsRequired = 2
+        view.addGestureRecognizer(doubleTap)
+        doubleTap.delegate = self
+    }
+
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRequireFailureOf otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return gestureRecognizer == self.singleTap && otherGestureRecognizer == self.doubleTap
+    }
+
+    @objc private func showGallery(recognizer: UITapGestureRecognizer) {
+        print("show gallery")
+    }
+    
+    @objc private func editGalleryName(recognizer: UITapGestureRecognizer) {
+        print("edit gallery name")
     }
 }
