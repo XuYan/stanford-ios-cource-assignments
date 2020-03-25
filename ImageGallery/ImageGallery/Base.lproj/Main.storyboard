@@ -78,7 +78,7 @@
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="J1N-YB-gHf" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1861" y="5"/>
+            <point key="canvasLocation" x="1438" y="-13"/>
         </scene>
         <!--Gallery Table View Controller-->
         <scene sceneID="VEZ-8U-Lxx">
@@ -139,7 +139,6 @@
                                 </tableViewCellContentView>
                                 <connections>
                                     <outlet property="name" destination="msJ-ps-12v" id="jNg-Ly-2c9"/>
-                                    <segue destination="uDu-hm-q0n" kind="showDetail" identifier="ShowGallery" id="Hsz-Ik-bu0"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -153,6 +152,7 @@
                     <connections>
                         <outlet property="addGalleryBtn" destination="Ddd-XV-pKe" id="fBN-8P-vPi"/>
                         <outlet property="tableHeaderLabel" destination="nup-cd-x5r" id="V5y-ra-zPY"/>
+                        <segue destination="uDu-hm-q0n" kind="showDetail" identifier="ShowGallery" id="bNE-P5-9GI"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="P2r-xO-aqz" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -177,6 +177,6 @@
         <image name="plus" catalog="system" width="64" height="56"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="Hsz-Ik-bu0"/>
+        <segue reference="bNE-P5-9GI"/>
     </inferredMetricsTieBreakers>
 </document>

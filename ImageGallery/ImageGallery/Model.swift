@@ -51,6 +51,11 @@ struct App {
     func isOperationOnCurrentSection(at: Int) -> Bool {
         return at == 0
     }
+    
+    func updateGalleryTitle(at: IndexPath, newTitle: String?) {
+        let gallery = self.gallery(at: at)
+        gallery.title = newTitle ?? ""
+    }
 }
 
 class Gallery {

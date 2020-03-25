@@ -11,7 +11,7 @@ import UIKit
 class TableCellTableViewCell: UITableViewCell, UITextFieldDelegate {
     private var singleTap: UITapGestureRecognizer!
     private var doubleTap: UITapGestureRecognizer!
-    private var tapDelegate: TappableCell?
+    var tapDelegate: TappableCell?
 
     @IBOutlet weak var name: UITextField! {
         didSet {
@@ -51,10 +51,12 @@ class TableCellTableViewCell: UITableViewCell, UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         self.name.resignFirstResponder()
         self.name.isEnabled = false
+        self.tapDelegate?.onEditCompleted(cell: self)
         return true
     }
 }
 
 protocol TappableCell {
     func cellSingleTapped()
+    func onEditCompleted(cell: TableCellTableViewCell)
 }

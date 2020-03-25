@@ -43,6 +43,7 @@ class GalleryTableViewController: UITableViewController, UIGestureRecognizerDele
         if let galleryCell = cell as? TableCellTableViewCell {
             galleryCell.name.isEnabled = false
             galleryCell.name.text = app.gallery(at: indexPath).title
+            galleryCell.tapDelegate = self
         }
 
         return cell
@@ -86,6 +87,13 @@ class GalleryTableViewController: UITableViewController, UIGestureRecognizerDele
     func cellSingleTapped() {
         performSegue(withIdentifier: "ShowGallery", sender: nil)
     }
+
+    func onEditCompleted(cell: TableCellTableViewCell) {
+        let tableView = self.view as! UITableView
+        if let indexPath = tableView.indexPath(for: cell) {
+            self.app.updateGalleryTitle(at: indexPath, newTitle: cell.name.text)
+        }
+    }
     
     override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
         if identifier == "ShowGallery", let indexPath = tableView.indexPathForSelectedRow {
@@ -95,7 +103,6 @@ class GalleryTableViewController: UITableViewController, UIGestureRecognizerDele
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        print("here")
         if segue.identifier == "ShowGallery" {
             if let indexPath = tableView.indexPathForSelectedRow {
                 if let gallery = app.getCurrentGallery(at: indexPath) {
