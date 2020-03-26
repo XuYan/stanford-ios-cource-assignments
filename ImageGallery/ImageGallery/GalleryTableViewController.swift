@@ -18,6 +18,13 @@ class GalleryTableViewController: UITableViewController, UIGestureRecognizerDele
         select(at: CURRENTTOP)
     }
     
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        if splitViewController?.preferredDisplayMode != .primaryOverlay {
+            splitViewController?.preferredDisplayMode = .primaryOverlay
+        }
+    }
+    
     private func select(at: IndexPath) {
         tableView.selectRow(at: at, animated: true, scrollPosition: .none)
         performSegue(withIdentifier: "ShowGallery", sender: nil)
