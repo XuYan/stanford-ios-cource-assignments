@@ -3,6 +3,7 @@
     <device id="ipad9_7" orientation="landscape" layout="fullscreen" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="collection view cell content view" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -45,6 +46,7 @@
                                 <size key="customSize" width="100" height="100"/>
                                 <connections>
                                     <outlet property="imageView" destination="QhG-7J-SVL" id="FLj-by-wzA"/>
+                                    <segue destination="hx4-Ti-sPB" kind="show" identifier="ShowImageDetail" id="1hd-ps-pf1"/>
                                 </connections>
                             </collectionViewCell>
                             <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" reuseIdentifier="GalleryImagePlaceholderCell" id="teg-FA-f3L">
@@ -72,13 +74,50 @@
                             <outlet property="delegate" destination="uDu-hm-q0n" id="x2S-lM-jNf"/>
                         </connections>
                     </collectionView>
+                    <navigationItem key="navigationItem" id="ARM-Zy-pxW"/>
                     <connections>
                         <outlet property="collectionView" destination="z8m-Uv-PzI" id="Um2-1t-FED"/>
                     </connections>
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="J1N-YB-gHf" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1438" y="-13"/>
+            <point key="canvasLocation" x="2162.109375" y="-13.28125"/>
+        </scene>
+        <!--Image Detail View Controller-->
+        <scene sceneID="JzN-KD-A6E">
+            <objects>
+                <viewController id="hx4-Ti-sPB" customClass="ImageDetailViewController" customModule="ImageGallery" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="xVa-nW-O1A">
+                        <rect key="frame" x="0.0" y="0.0" width="703" height="768"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="d1j-NK-y0B">
+                                <rect key="frame" x="0.0" y="50" width="703.5" height="718"/>
+                            </scrollView>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="d1j-NK-y0B" firstAttribute="centerY" secondItem="QuQ-Nn-FVR" secondAttribute="centerY" id="2LW-EB-9pI"/>
+                            <constraint firstItem="QuQ-Nn-FVR" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="d1j-NK-y0B" secondAttribute="trailing" id="H8n-6r-JYq"/>
+                            <constraint firstItem="d1j-NK-y0B" firstAttribute="centerX" secondItem="QuQ-Nn-FVR" secondAttribute="centerX" id="Hdr-qA-INC"/>
+                            <constraint firstItem="d1j-NK-y0B" firstAttribute="top" relation="greaterThanOrEqual" secondItem="QuQ-Nn-FVR" secondAttribute="top" id="PuN-f2-A0T"/>
+                            <constraint firstItem="d1j-NK-y0B" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="QuQ-Nn-FVR" secondAttribute="leading" id="aRz-Bj-2kd"/>
+                            <constraint firstItem="d1j-NK-y0B" firstAttribute="width" secondItem="QuQ-Nn-FVR" secondAttribute="width" priority="250" id="eDX-7m-29t"/>
+                            <constraint firstItem="d1j-NK-y0B" firstAttribute="height" secondItem="QuQ-Nn-FVR" secondAttribute="height" priority="250" id="n6Q-1b-2yG"/>
+                            <constraint firstItem="QuQ-Nn-FVR" firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="d1j-NK-y0B" secondAttribute="bottom" id="sOn-vO-urY"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="QuQ-Nn-FVR"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="HXH-t8-8HM"/>
+                    <connections>
+                        <outlet property="scrollView" destination="d1j-NK-y0B" id="o37-Lx-UrK"/>
+                        <outlet property="scrollViewHeight" destination="n6Q-1b-2yG" id="iJ3-bp-9q3"/>
+                        <outlet property="scrollViewWidth" destination="eDX-7m-29t" id="o9f-6z-Jue"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="eC5-tB-wut" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2879.8828125" y="-13.28125"/>
         </scene>
         <!--Gallery Table View Controller-->
         <scene sceneID="VEZ-8U-Lxx">
@@ -152,7 +191,7 @@
                     <connections>
                         <outlet property="addGalleryBtn" destination="Ddd-XV-pKe" id="fBN-8P-vPi"/>
                         <outlet property="tableHeaderLabel" destination="nup-cd-x5r" id="V5y-ra-zPY"/>
-                        <segue destination="uDu-hm-q0n" kind="showDetail" identifier="ShowGallery" id="bNE-P5-9GI"/>
+                        <segue destination="UVR-2N-COB" kind="showDetail" identifier="ShowGallery" id="bNE-P5-9GI"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="P2r-xO-aqz" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -164,7 +203,7 @@
             <objects>
                 <splitViewController id="gn7-Ma-wOm" sceneMemberID="viewController">
                     <connections>
-                        <segue destination="uDu-hm-q0n" kind="relationship" relationship="detailViewController" id="20B-9j-cM4"/>
+                        <segue destination="UVR-2N-COB" kind="relationship" relationship="detailViewController" id="20B-9j-cM4"/>
                         <segue destination="30L-EK-hQU" kind="relationship" relationship="masterViewController" id="Yn0-vx-2Uq"/>
                     </connections>
                 </splitViewController>
@@ -172,11 +211,29 @@
             </objects>
             <point key="canvasLocation" x="567" y="5"/>
         </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="eyx-YC-j9X">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="UVR-2N-COB" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="Xg2-hp-BFb">
+                        <rect key="frame" x="0.0" y="0.0" width="703.5" height="50"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="uDu-hm-q0n" kind="relationship" relationship="rootViewController" id="fJx-pr-OTm"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Rs3-0D-epb" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1437.890625" y="-13.28125"/>
+        </scene>
     </scenes>
     <resources>
         <image name="plus" catalog="system" width="64" height="56"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="bNE-P5-9GI"/>
+        <segue reference="20B-9j-cM4"/>
     </inferredMetricsTieBreakers>
 </document>

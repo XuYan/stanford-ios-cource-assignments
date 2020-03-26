@@ -97,7 +97,7 @@ class ImageGalleryViewController: UICollectionViewController, UICollectionViewDe
             }
         }
     }
-    
+
     private func onLoadCompleted(
         context: UICollectionViewDropPlaceholderContext,
         url: URL,
@@ -114,32 +114,32 @@ class ImageGalleryViewController: UICollectionViewController, UICollectionViewDe
             }
         }
     }
-    
+
     private func onLoadFailed(context: UICollectionViewDropPlaceholderContext) {
         DispatchQueue.main.async {
             context.deletePlaceholder()
         }
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let cellWidth = Double(galleryImageWidth)
         let cellHeight = cellWidth / self.gallery.aspectRatio(at: indexPath)
         return CGSize(width: cellWidth, height: cellHeight)
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
         return 1.0
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return 1.0
     }
-    
+
     private func registerGestures() {
         let pinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(scale(recognizer:)))
         collectionView.addGestureRecognizer(pinchGesture)
     }
-    
+
     @objc private func scale(recognizer: UIPinchGestureRecognizer) {
         if recognizer.state == .began || recognizer.state == .changed {
             galleryImageWidth = galleryImageWidth * Double(recognizer.scale)
@@ -147,6 +147,10 @@ class ImageGalleryViewController: UICollectionViewController, UICollectionViewDe
             flowLayout?.invalidateLayout()
             recognizer.scale = 1.0
         }
+    }
+
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
     }
 }
 

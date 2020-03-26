@@ -106,7 +106,7 @@ class GalleryTableViewController: UITableViewController, UIGestureRecognizerDele
         if segue.identifier == "ShowGallery" {
             if let indexPath = tableView.indexPathForSelectedRow {
                 if let gallery = app.getCurrentGallery(at: indexPath) {
-                    if let galleryVC = segue.destination as? ImageGalleryViewController {
+                    if let navVC = segue.destination as? UINavigationController, let galleryVC = navVC.topViewController as? ImageGalleryViewController {
                         galleryVC.gallery = gallery
                     }
                 }
