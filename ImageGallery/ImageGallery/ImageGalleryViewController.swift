@@ -163,8 +163,18 @@ class ImageGalleryViewController: UICollectionViewController, UICollectionViewDe
     
     @IBAction func save(_ sender: UIBarButtonItem) {
         if let json = self.gallery.json {
-            if let jsonString = String(data: json, encoding: .utf8) {
-                print(jsonString)
+            if let url = try? FileManager.default.url(
+                for: .documentDirectory,
+                in: .userDomainMask,
+                appropriateFor: nil,
+                create: true
+            ).appendingPathComponent("Untitled.json") {
+                do {
+                    try json.write(to: url)
+                    print("saved successfully")
+                } catch let error {
+                    print("couldn't save \(error)")
+                }
             }
         }
     }
