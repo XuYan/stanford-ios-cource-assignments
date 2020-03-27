@@ -88,22 +88,22 @@
             <objects>
                 <viewController id="hx4-Ti-sPB" customClass="ImageDetailViewController" customModule="ImageGallery" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="xVa-nW-O1A">
-                        <rect key="frame" x="0.0" y="0.0" width="703" height="768"/>
+                        <rect key="frame" x="0.0" y="0.0" width="703.5" height="768"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="d1j-NK-y0B">
-                                <rect key="frame" x="0.0" y="50" width="703.5" height="718"/>
+                                <rect key="frame" x="0.0" y="50" width="703.5" height="668"/>
                             </scrollView>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
-                            <constraint firstItem="d1j-NK-y0B" firstAttribute="centerY" secondItem="QuQ-Nn-FVR" secondAttribute="centerY" id="2LW-EB-9pI"/>
+                            <constraint firstItem="d1j-NK-y0B" firstAttribute="centerY" secondItem="QuQ-Nn-FVR" secondAttribute="centerY" constant="-25" id="ELv-XY-Rgj"/>
                             <constraint firstItem="QuQ-Nn-FVR" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="d1j-NK-y0B" secondAttribute="trailing" id="H8n-6r-JYq"/>
-                            <constraint firstItem="d1j-NK-y0B" firstAttribute="centerX" secondItem="QuQ-Nn-FVR" secondAttribute="centerX" id="Hdr-qA-INC"/>
                             <constraint firstItem="d1j-NK-y0B" firstAttribute="top" relation="greaterThanOrEqual" secondItem="QuQ-Nn-FVR" secondAttribute="top" id="PuN-f2-A0T"/>
                             <constraint firstItem="d1j-NK-y0B" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="QuQ-Nn-FVR" secondAttribute="leading" id="aRz-Bj-2kd"/>
                             <constraint firstItem="d1j-NK-y0B" firstAttribute="width" secondItem="QuQ-Nn-FVR" secondAttribute="width" priority="250" id="eDX-7m-29t"/>
                             <constraint firstItem="d1j-NK-y0B" firstAttribute="height" secondItem="QuQ-Nn-FVR" secondAttribute="height" priority="250" id="n6Q-1b-2yG"/>
+                            <constraint firstItem="d1j-NK-y0B" firstAttribute="centerX" secondItem="QuQ-Nn-FVR" secondAttribute="centerX" id="otV-Dd-k9N"/>
                             <constraint firstItem="QuQ-Nn-FVR" firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="d1j-NK-y0B" secondAttribute="bottom" id="sOn-vO-urY"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="QuQ-Nn-FVR"/>

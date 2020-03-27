@@ -150,7 +150,15 @@ class ImageGalleryViewController: UICollectionViewController, UICollectionViewDe
     }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        
+        if let identifier = segue.identifier, identifier == "ShowImageDetail" {
+            if let imageDetailVC = segue.destination as? ImageDetailViewController {
+                if let galleryImageCell = sender as? GalleryImageCell,
+                    let image = (galleryImageCell.subviews[1] as? UIImageView)?.image
+                {
+                    imageDetailVC.image = image
+                }
+            }
+        }
     }
 }
 

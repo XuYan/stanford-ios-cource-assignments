@@ -22,29 +22,36 @@ class ImageDetailViewController: UIViewController, UIScrollViewDelegate {
     }
     
     var imageView = UIImageView()
-    
     var image: UIImage? {
         get {
             return imageView.image
         }
 
         set {
-            let size = newValue?.size ?? CGSize.zero
             imageView.image = newValue
-            imageView.frame = CGRect(origin: CGPoint.zero, size: size)
-            scrollView.contentSize = size
-            scrollViewWidth.constant = size.width
-            scrollViewHeight.constant = size.height
-            if size.width > 0 && size.height > 0 {
-                scrollView.zoomScale = max(view.bounds.size.width / size.width, view.bounds.size.height / size.height)
-            } else {
-                scrollView.zoomScale = 1.0
-            }
+            imageView.frame = CGRect(origin: CGPoint.zero, size: newValue?.size ?? CGSize.zero)
         }
+    }
+    
+    func viewForZooming(in scrollView: UIScrollView) -> UIView? {
+        return self.imageView
     }
     
     func scrollViewDidZoom(_ scrollView: UIScrollView) {
         scrollViewWidth.constant = scrollView.contentSize.width
         scrollViewHeight.constant = scrollView.contentSize.height
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        let imageSize = self.image?.size ?? CGSize.zero
+        scrollViewWidth.constant = imageSize.width
+        scrollViewHeight.constant = imageSize.height
+        scrollView.contentSize = imageSize
+        if imageSize.width > 0 && imageSize.height > 0 {
+            scrollView.zoomScale = max(view.bounds.size.width / imageSize.width, view.bounds.size.height / imageSize.height)
+        } else {
+            scrollView.zoomScale = 1.0
+        }
     }
 }
