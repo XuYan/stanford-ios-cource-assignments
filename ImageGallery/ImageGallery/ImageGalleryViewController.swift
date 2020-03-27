@@ -18,13 +18,15 @@ class ImageGalleryViewController: UICollectionViewController, UICollectionViewDe
         return collectionView?.collectionViewLayout as? UICollectionViewFlowLayout
     }
 
+    // MARK: VC life cycle methods
     override func viewDidLoad() {
         super.viewDidLoad()
 
         self.collectionView.dropDelegate = self
         registerGestures()
     }
-
+    
+    // MARK: CollectionView delegate methods
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if gallery == nil {
             return 0
