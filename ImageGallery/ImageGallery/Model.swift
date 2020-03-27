@@ -58,9 +58,12 @@ struct App {
     }
 }
 
-class Gallery {
+class Gallery: Codable {
     var title: String
     var images: [GalleryImage]
+    var json: Data? {
+        return try? JSONEncoder().encode(self)
+    }
     
     init(title: String?) {
         self.title = title ?? ""
@@ -84,7 +87,7 @@ class Gallery {
     }
 }
 
-struct GalleryImage {
+struct GalleryImage: Codable {
     var url: URL
     var aspectRatio: Double
     var data: Data

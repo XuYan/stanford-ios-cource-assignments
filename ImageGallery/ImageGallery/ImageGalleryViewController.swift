@@ -160,6 +160,16 @@ class ImageGalleryViewController: UICollectionViewController, UICollectionViewDe
             }
         }
     }
+    
+    @IBAction func save(_ sender: UIBarButtonItem) {
+        if let json = self.gallery.json {
+            if let jsonString = String(data: json, encoding: .utf8) {
+                print(jsonString)
+            }
+        }
+    }
+    
+    
 }
 
 extension UIImage {

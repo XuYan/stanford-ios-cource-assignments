@@ -74,7 +74,13 @@
                             <outlet property="delegate" destination="uDu-hm-q0n" id="x2S-lM-jNf"/>
                         </connections>
                     </collectionView>
-                    <navigationItem key="navigationItem" id="ARM-Zy-pxW"/>
+                    <navigationItem key="navigationItem" id="ARM-Zy-pxW">
+                        <barButtonItem key="rightBarButtonItem" systemItem="save" id="Bcc-Fg-Ml9">
+                            <connections>
+                                <action selector="save:" destination="uDu-hm-q0n" id="nYg-WV-8bG"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="collectionView" destination="z8m-Uv-PzI" id="Um2-1t-FED"/>
                     </connections>
