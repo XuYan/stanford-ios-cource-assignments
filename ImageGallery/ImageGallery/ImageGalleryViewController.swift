@@ -183,7 +183,9 @@ class ImageGalleryViewController: UICollectionViewController, UICollectionViewDe
     
     @IBAction func close(_ sender: UIBarButtonItem) {
         self.save()
-        self.document?.close()
+        dismiss(animated: true) {
+            self.document?.close()
+        }
     }
     
 }
