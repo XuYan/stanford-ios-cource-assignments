@@ -69,6 +69,15 @@ class Gallery: Codable {
         self.title = title ?? ""
         self.images = []
     }
+    
+    init?(data: Data) {
+        if let newValue = try? JSONDecoder().decode(Gallery.self, from: data) {
+            self.title = newValue.title
+            self.images = newValue.images
+        } else {
+            return nil
+        }
+    }
 
     func url(at indexPath: IndexPath) -> URL {
         return images[indexPath.item].url

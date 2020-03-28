@@ -12,6 +12,7 @@ private let imageCellReuseId = "GalleryImageCell"
 private let placeholderCellReuseId = "GalleryImagePlaceholderCell"
 
 class ImageGalleryViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout, UICollectionViewDropDelegate {
+    var document: GalleryDocument? // this will be set by document browser VC.
     var gallery: Gallery!
     private var galleryImageWidth = 300.0
     private var flowLayout: UICollectionViewFlowLayout? {
@@ -21,9 +22,19 @@ class ImageGalleryViewController: UICollectionViewController, UICollectionViewDe
     // MARK: VC life cycle methods
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         self.collectionView.dropDelegate = self
         registerGestures()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        self.document?.open(completionHandler: { success in
+            if success {
+                self.gallery = self.document?.gallery
+            }
+        })
     }
     
     // MARK: CollectionView delegate methods
@@ -163,24 +174,17 @@ class ImageGalleryViewController: UICollectionViewController, UICollectionViewDe
         }
     }
     
-    @IBAction func save(_ sender: UIBarButtonItem) {
-        if let json = self.gallery.json {
-            if let url = try? FileManager.default.url(
-                for: .documentDirectory,
-                in: .userDomainMask,
-                appropriateFor: nil,
-                create: true
-            ).appendingPathComponent("Untitled.json") {
-                do {
-                    try json.write(to: url)
-                    print("saved successfully")
-                } catch let error {
-                    print("couldn't save \(error)")
-                }
-            }
+    @IBAction func save(_ sender: UIBarButtonItem? = nil) {
+        document?.gallery = self.gallery
+        if document?.gallery != nil {
+            document?.updateChangeCount(.done)
         }
     }
     
+    @IBAction func close(_ sender: UIBarButtonItem) {
+        self.save()
+        self.document?.close()
+    }
     
 }
 
