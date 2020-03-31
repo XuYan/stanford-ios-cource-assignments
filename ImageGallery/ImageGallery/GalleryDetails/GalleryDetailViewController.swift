@@ -1,5 +1,5 @@
 //
-//  ImageGalleryViewController.swift
+//  GalleryDetailViewController.swift
 //  ImageGallery
 //
 //  Created by Xu Yan on 3/17/20.
@@ -11,7 +11,7 @@ import UIKit
 private let imageCellReuseId = "GalleryImageCell"
 private let placeholderCellReuseId = "GalleryImagePlaceholderCell"
 
-class ImageGalleryViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout, UICollectionViewDropDelegate {
+class GalleryDetailViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout, UICollectionViewDropDelegate {
     var gallery: Gallery!
     private var galleryImageWidth = 300.0
     private var flowLayout: UICollectionViewFlowLayout? {

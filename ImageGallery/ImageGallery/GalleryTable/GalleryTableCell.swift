@@ -1,5 +1,5 @@
 //
-//  TableCellTableViewCell.swift
+//  GalleryTableCell.swift
 //  ImageGallery
 //
 //  Created by Xu Yan on 3/24/20.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class TableCellTableViewCell: UITableViewCell, UITextFieldDelegate {
+class GalleryTableCell: UITableViewCell, UITextFieldDelegate {
     private var singleTap: UITapGestureRecognizer!
     private var doubleTap: UITapGestureRecognizer!
     var tapDelegate: TappableCell?
@@ -58,5 +58,5 @@ class TableCellTableViewCell: UITableViewCell, UITextFieldDelegate {
 
 protocol TappableCell {
     func cellSingleTapped()
-    func onEditCompleted(cell: TableCellTableViewCell)
+    func onEditCompleted(cell: GalleryTableCell)
 }

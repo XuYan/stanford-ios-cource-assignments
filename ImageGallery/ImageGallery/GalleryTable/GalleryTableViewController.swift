@@ -47,7 +47,7 @@ class GalleryTableViewController: UITableViewController, UIGestureRecognizerDele
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "TableCell", for: indexPath)
-        if let galleryCell = cell as? TableCellTableViewCell {
+        if let galleryCell = cell as? GalleryTableCell {
             galleryCell.name.isEnabled = false
             galleryCell.name.text = app.gallery(at: indexPath).title
             galleryCell.tapDelegate = self
@@ -95,7 +95,7 @@ class GalleryTableViewController: UITableViewController, UIGestureRecognizerDele
         performSegue(withIdentifier: "ShowGallery", sender: nil)
     }
 
-    func onEditCompleted(cell: TableCellTableViewCell) {
+    func onEditCompleted(cell: GalleryTableCell) {
         let tableView = self.view as! UITableView
         if let indexPath = tableView.indexPath(for: cell) {
             self.app.updateGalleryTitle(at: indexPath, newTitle: cell.name.text)
@@ -113,7 +113,7 @@ class GalleryTableViewController: UITableViewController, UIGestureRecognizerDele
         if segue.identifier == "ShowGallery" {
             if let indexPath = tableView.indexPathForSelectedRow {
                 if let gallery = app.getCurrentGallery(at: indexPath) {
-                    if let navVC = segue.destination as? UINavigationController, let galleryVC = navVC.topViewController as? ImageGalleryViewController {
+                    if let navVC = segue.destination as? UINavigationController, let galleryVC = navVC.topViewController as? GalleryDetailViewController {
                         galleryVC.gallery = gallery
                     }
                 }
