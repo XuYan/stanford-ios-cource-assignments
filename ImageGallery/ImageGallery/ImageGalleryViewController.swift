@@ -12,7 +12,6 @@ private let imageCellReuseId = "GalleryImageCell"
 private let placeholderCellReuseId = "GalleryImagePlaceholderCell"
 
 class ImageGalleryViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout, UICollectionViewDropDelegate {
-    var document: GalleryDocument? // this will be set by document browser VC.
     var gallery: Gallery!
     private var galleryImageWidth = 300.0
     private var flowLayout: UICollectionViewFlowLayout? {
@@ -27,16 +26,6 @@ class ImageGalleryViewController: UICollectionViewController, UICollectionViewDe
         registerGestures()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        self.document?.open(completionHandler: { success in
-            if success {
-                self.gallery = self.document?.gallery
-            }
-        })
-    }
-    
     // MARK: CollectionView delegate methods
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if gallery == nil {
@@ -49,9 +38,11 @@ class ImageGalleryViewController: UICollectionViewController, UICollectionViewDe
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: imageCellReuseId, for: indexPath)
         if let galleryImageCell = cell as? GalleryImageCell {
                 DispatchQueue.main.async {
-                    let imageView = UIImageView(image: UIImage(data: self.gallery.data(at: indexPath)))
-                    imageView.frame = CGRect(x: 0, y: 0, width: Double(self.galleryImageWidth), height: Double(self.galleryImageWidth) / self.gallery.aspectRatio(at: indexPath))
-                    galleryImageCell.addSubview(imageView)
+                    galleryImageCell.imageView.image = UIImage(data: self.gallery.data(at: indexPath))
+                    
+//                    let imageView = UIImageView(image: UIImage(data: self.gallery.data(at: indexPath)))
+//                    imageView.frame = CGRect(x: 0, y: 0, width: Double(self.galleryImageWidth), height: Double(self.galleryImageWidth) / self.gallery.aspectRatio(at: indexPath))
+//                    galleryImageCell.addSubview(imageView)
                 }
         }
     
@@ -163,31 +154,13 @@ class ImageGalleryViewController: UICollectionViewController, UICollectionViewDe
     }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let identifier = segue.identifier, identifier == "ShowImageDetail" {
-            if let imageDetailVC = segue.destination as? ImageDetailViewController {
-                if let galleryImageCell = sender as? GalleryImageCell,
-                    let image = (galleryImageCell.subviews[1] as? UIImageView)?.image
-                {
-                    imageDetailVC.image = image
-                }
-            }
+        if segue.identifier == "ShowImageDetail",
+            let imageDetailVC = segue.destination as? ImageDetailViewController,
+            let galleryImageCell = sender as? GalleryImageCell
+        {
+            imageDetailVC.image = galleryImageCell.imageView.image
         }
     }
-    
-    @IBAction func save(_ sender: UIBarButtonItem? = nil) {
-        document?.gallery = self.gallery
-        if document?.gallery != nil {
-            document?.updateChangeCount(.done)
-        }
-    }
-    
-    @IBAction func close(_ sender: UIBarButtonItem) {
-        self.save()
-        dismiss(animated: true) {
-            self.document?.close()
-        }
-    }
-    
 }
 
 extension UIImage {

@@ -36,13 +36,12 @@
                                     </subviews>
                                     <constraints>
                                         <constraint firstItem="QhG-7J-SVL" firstAttribute="leading" secondItem="fWh-fS-uZd" secondAttribute="leading" id="0UX-mt-Jre"/>
-                                        <constraint firstItem="QhG-7J-SVL" firstAttribute="centerX" secondItem="fWh-fS-uZd" secondAttribute="centerX" id="0iV-6s-7RB"/>
-                                        <constraint firstItem="QhG-7J-SVL" firstAttribute="centerY" secondItem="fWh-fS-uZd" secondAttribute="centerY" id="SoO-Gs-ime"/>
                                         <constraint firstAttribute="trailing" secondItem="QhG-7J-SVL" secondAttribute="trailing" id="WR6-vU-vOO"/>
                                         <constraint firstAttribute="bottom" secondItem="QhG-7J-SVL" secondAttribute="bottom" id="XZs-uf-cMX"/>
                                         <constraint firstItem="QhG-7J-SVL" firstAttribute="top" secondItem="fWh-fS-uZd" secondAttribute="top" id="fqU-MW-QJg"/>
                                     </constraints>
                                 </collectionViewCellContentView>
+                                <color key="backgroundColor" red="0.24954307989999999" green="0.97084714390000004" blue="0.438167425" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <size key="customSize" width="100" height="100"/>
                                 <connections>
                                     <outlet property="imageView" destination="QhG-7J-SVL" id="FLj-by-wzA"/>
@@ -74,13 +73,7 @@
                             <outlet property="delegate" destination="uDu-hm-q0n" id="x2S-lM-jNf"/>
                         </connections>
                     </collectionView>
-                    <navigationItem key="navigationItem" id="ARM-Zy-pxW">
-                        <barButtonItem key="rightBarButtonItem" systemItem="save" id="Bcc-Fg-Ml9">
-                            <connections>
-                                <action selector="save:" destination="uDu-hm-q0n" id="nYg-WV-8bG"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" id="9Mm-4f-hS4"/>
                     <connections>
                         <outlet property="collectionView" destination="z8m-Uv-PzI" id="Um2-1t-FED"/>
                     </connections>
@@ -97,28 +90,30 @@
                         <rect key="frame" x="0.0" y="0.0" width="703.5" height="768"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="d1j-NK-y0B">
-                                <rect key="frame" x="0.0" y="50" width="703.5" height="668"/>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="d1j-NK-y0B">
+                                <rect key="frame" x="0.0" y="50" width="703.5" height="718"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" priority="250" constant="718" id="AWr-E5-TxI"/>
+                                    <constraint firstAttribute="width" priority="250" constant="703.5" id="y1V-j0-kEQ"/>
+                                </constraints>
                             </scrollView>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
-                            <constraint firstItem="d1j-NK-y0B" firstAttribute="centerY" secondItem="QuQ-Nn-FVR" secondAttribute="centerY" constant="-25" id="ELv-XY-Rgj"/>
-                            <constraint firstItem="QuQ-Nn-FVR" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="d1j-NK-y0B" secondAttribute="trailing" id="H8n-6r-JYq"/>
-                            <constraint firstItem="d1j-NK-y0B" firstAttribute="top" relation="greaterThanOrEqual" secondItem="QuQ-Nn-FVR" secondAttribute="top" id="PuN-f2-A0T"/>
-                            <constraint firstItem="d1j-NK-y0B" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="QuQ-Nn-FVR" secondAttribute="leading" id="aRz-Bj-2kd"/>
-                            <constraint firstItem="d1j-NK-y0B" firstAttribute="width" secondItem="QuQ-Nn-FVR" secondAttribute="width" priority="250" id="eDX-7m-29t"/>
-                            <constraint firstItem="d1j-NK-y0B" firstAttribute="height" secondItem="QuQ-Nn-FVR" secondAttribute="height" priority="250" id="n6Q-1b-2yG"/>
-                            <constraint firstItem="d1j-NK-y0B" firstAttribute="centerX" secondItem="QuQ-Nn-FVR" secondAttribute="centerX" id="otV-Dd-k9N"/>
-                            <constraint firstItem="QuQ-Nn-FVR" firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="d1j-NK-y0B" secondAttribute="bottom" id="sOn-vO-urY"/>
+                            <constraint firstItem="d1j-NK-y0B" firstAttribute="centerY" secondItem="QuQ-Nn-FVR" secondAttribute="centerY" id="8mv-rh-FiO"/>
+                            <constraint firstItem="QuQ-Nn-FVR" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="d1j-NK-y0B" secondAttribute="trailing" id="Hi6-U8-Ket"/>
+                            <constraint firstItem="d1j-NK-y0B" firstAttribute="top" relation="greaterThanOrEqual" secondItem="QuQ-Nn-FVR" secondAttribute="top" id="kMA-bo-Af5"/>
+                            <constraint firstItem="QuQ-Nn-FVR" firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="d1j-NK-y0B" secondAttribute="bottom" id="m6J-40-BIA"/>
+                            <constraint firstItem="d1j-NK-y0B" firstAttribute="centerX" secondItem="QuQ-Nn-FVR" secondAttribute="centerX" id="phc-Vi-lFk"/>
+                            <constraint firstItem="d1j-NK-y0B" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="QuQ-Nn-FVR" secondAttribute="leading" id="yGN-ak-Ogv"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="QuQ-Nn-FVR"/>
                     </view>
                     <navigationItem key="navigationItem" id="HXH-t8-8HM"/>
                     <connections>
                         <outlet property="scrollView" destination="d1j-NK-y0B" id="o37-Lx-UrK"/>
-                        <outlet property="scrollViewHeight" destination="n6Q-1b-2yG" id="iJ3-bp-9q3"/>
-                        <outlet property="scrollViewWidth" destination="eDX-7m-29t" id="o9f-6z-Jue"/>
+                        <outlet property="scrollViewHeight" destination="AWr-E5-TxI" id="Asr-MW-m0z"/>
+                        <outlet property="scrollViewWidth" destination="y1V-j0-kEQ" id="dxF-gi-muK"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="eC5-tB-wut" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
