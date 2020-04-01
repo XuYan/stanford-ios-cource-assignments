@@ -13,7 +13,7 @@ private let placeholderCellReuseId = "GalleryImagePlaceholderCell"
 
 class GalleryDetailViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout, UICollectionViewDropDelegate {
     var gallery: Gallery!
-    private var galleryImageWidth = 300.0
+    private var cellWidth: Double!
     private var flowLayout: UICollectionViewFlowLayout? {
         return collectionView?.collectionViewLayout as? UICollectionViewFlowLayout
     }
@@ -22,6 +22,7 @@ class GalleryDetailViewController: UICollectionViewController, UICollectionViewD
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        cellWidth = Double(view.frame.width) / 3
         self.collectionView.dropDelegate = self
         registerGestures()
     }
@@ -35,15 +36,18 @@ class GalleryDetailViewController: UICollectionViewController, UICollectionViewD
     }
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        print("\(indexPath.item)")
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: imageCellReuseId, for: indexPath)
         if let galleryImageCell = cell as? GalleryImageCell {
-                DispatchQueue.main.async {
-                    galleryImageCell.imageView.image = UIImage(data: self.gallery.data(at: indexPath))
-                    
-//                    let imageView = UIImageView(image: UIImage(data: self.gallery.data(at: indexPath)))
-//                    imageView.frame = CGRect(x: 0, y: 0, width: Double(self.galleryImageWidth), height: Double(self.galleryImageWidth) / self.gallery.aspectRatio(at: indexPath))
-//                    galleryImageCell.addSubview(imageView)
+            DispatchQueue.global(qos: .userInitiated).async {
+                guard let data = try? Data(contentsOf: self.gallery.url(at: indexPath)) else {
+                    print("Fail to load image")
+                    return
                 }
+                DispatchQueue.main.async {
+                    galleryImageCell.imageView.image = UIImage(data: data)
+                }
+            }
         }
     
         return cell
@@ -60,9 +64,6 @@ class GalleryDetailViewController: UICollectionViewController, UICollectionViewD
     func collectionView(_ collectionView: UICollectionView, performDropWith coordinator: UICollectionViewDropCoordinator) {
         let destinationIndexPath = coordinator.destinationIndexPath ?? IndexPath(item: self.gallery.images.count, section: 0)
         for item in coordinator.items {
-            var draggedImage: UIImage? = nil
-            var draggedUrl: URL? = nil
-
             let placeholderContext = coordinator.drop(
                 item.dragItem,
                 to: UICollectionViewDropPlaceholder(
@@ -71,64 +72,26 @@ class GalleryDetailViewController: UICollectionViewController, UICollectionViewD
                 )
             )
             let itemProvider = item.dragItem.itemProvider
-            itemProvider.loadObject(ofClass: UIImage.self) { (provider, error) in
-                if let image = provider as? UIImage {
-                    draggedImage = image
-                    if draggedUrl != nil {
-                        self.onLoadCompleted(
-                            context: placeholderContext,
-                            url: draggedUrl!,
-                            aspectRatio: draggedImage!.aspectRatio
-                        )
+            itemProvider.loadObject(ofClass: UIImage.self) { (imgProvider, error) in
+                itemProvider.loadObject(ofClass: NSURL.self) { (urlProvider, error) in
+                    DispatchQueue.main.async {
+                        if let image = imgProvider as? UIImage, let url = urlProvider as? URL {
+                            placeholderContext.commitInsertion { insertionIndexPath in
+                                self.gallery.insert(GalleryImage(url: url.imageURL, aspectRatio: image.aspectRatio), at: insertionIndexPath)
+                            }
+                        } else {
+                            placeholderContext.deletePlaceholder()
+                        }
                     }
-                } else {
-                    self.onLoadFailed(context: placeholderContext)
-                }
-            }
-            itemProvider.loadObject(ofClass: NSURL.self) { (provider, error) in
-                if let url = provider as? URL {
-                    draggedUrl = url.imageURL
-                    if draggedImage != nil {
-                        self.onLoadCompleted(
-                            context: placeholderContext,
-                            url: draggedUrl!,
-                            aspectRatio: draggedImage!.aspectRatio
-                        )
-                    }
-                } else {
-                    self.onLoadFailed(context: placeholderContext)
                 }
             }
         }
     }
-
-    private func onLoadCompleted(
-        context: UICollectionViewDropPlaceholderContext,
-        url: URL,
-        aspectRatio: Double
-    ) {
-        guard let data = try? Data(contentsOf: url) else {
-            print("Fail to load image")
-            return
-        }
-        let image = GalleryImage(url: url, aspectRatio: aspectRatio, data: data)
-        DispatchQueue.main.async {
-            context.commitInsertion { insertionIndexPath in
-                self.gallery.insert(image, at: insertionIndexPath)
-            }
-        }
-    }
-
-    private func onLoadFailed(context: UICollectionViewDropPlaceholderContext) {
-        DispatchQueue.main.async {
-            context.deletePlaceholder()
-        }
-    }
-
+    
+    
+    // MARK: - UICollectionViewDelegateFlowLayout
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let cellWidth = Double(galleryImageWidth)
-        let cellHeight = cellWidth / self.gallery.aspectRatio(at: indexPath)
-        return CGSize(width: cellWidth, height: cellHeight)
+        return CGSize(width: cellWidth, height: cellWidth / gallery.aspectRatio(at: indexPath))
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
@@ -146,7 +109,7 @@ class GalleryDetailViewController: UICollectionViewController, UICollectionViewD
 
     @objc private func scale(recognizer: UIPinchGestureRecognizer) {
         if recognizer.state == .began || recognizer.state == .changed {
-            galleryImageWidth = galleryImageWidth * Double(recognizer.scale)
+            cellWidth = cellWidth * Double(recognizer.scale)
             collectionView.reloadData()
             flowLayout?.invalidateLayout()
             recognizer.scale = 1.0

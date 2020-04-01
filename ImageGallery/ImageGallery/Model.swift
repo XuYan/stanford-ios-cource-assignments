@@ -87,10 +87,6 @@ class Gallery: Codable {
         return images[indexPath.item].aspectRatio
     }
     
-    func data(at indexPath: IndexPath) -> Data {
-        return images[indexPath.item].data
-    }
-    
     func insert(_ image: GalleryImage, at: IndexPath) {
         images.insert(image, at: at.item)
     }
@@ -99,5 +95,4 @@ class Gallery: Codable {
 struct GalleryImage: Codable {
     var url: URL
     var aspectRatio: Double
-    var data: Data
 }
