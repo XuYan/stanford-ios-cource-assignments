@@ -79,6 +79,9 @@ class GalleryTableViewController: UITableViewController, UIGestureRecognizerDele
             if !app.isOperationOnCurrentSection(at: indexPath) {
                 _ = app.removeGallery(at: indexPath)
                 tableView.deleteRows(at: [indexPath], with: .fade)
+                // reload section is necessary to clear empty 'recently deleted' section.
+                // when there is no row in current section, delete the last row in 'recently deleted' section should clear out the section
+                tableView.reloadSections(IndexSet(integer: 1), with: .automatic)
             } else {
                 tableView.performBatchUpdates({
                     app.addToRecentlyDeletedGalleries(app.removeGallery(at: indexPath))
