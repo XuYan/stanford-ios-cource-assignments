@@ -12,8 +12,9 @@ private let imageCellReuseId = "GalleryImageCell"
 private let placeholderCellReuseId = "GalleryImagePlaceholderCell"
 
 class GalleryDetailViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout, UICollectionViewDropDelegate {
+    // MARK: - Properties
     var gallery: Gallery!
-    private var cellWidth: Double!
+    private var cellWidth: CGFloat!
     private var flowLayout: UICollectionViewFlowLayout? {
         return collectionView?.collectionViewLayout as? UICollectionViewFlowLayout
     }
@@ -22,7 +23,7 @@ class GalleryDetailViewController: UICollectionViewController, UICollectionViewD
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        cellWidth = Double(view.frame.width) / 3
+        cellWidth = view.frame.width / 3
         self.collectionView.dropDelegate = self
         registerGestures()
     }
@@ -91,7 +92,8 @@ class GalleryDetailViewController: UICollectionViewController, UICollectionViewD
     
     // MARK: - UICollectionViewDelegateFlowLayout
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: cellWidth, height: cellWidth / gallery.aspectRatio(at: indexPath))
+        let cellHeight = cellWidth / CGFloat(gallery.aspectRatio(at: indexPath))
+        return CGSize(width: cellWidth, height: cellHeight)
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
@@ -109,7 +111,7 @@ class GalleryDetailViewController: UICollectionViewController, UICollectionViewD
 
     @objc private func scale(recognizer: UIPinchGestureRecognizer) {
         if recognizer.state == .began || recognizer.state == .changed {
-            cellWidth = cellWidth * Double(recognizer.scale)
+            cellWidth = cellWidth * recognizer.scale
             collectionView.reloadData()
             flowLayout?.invalidateLayout()
             recognizer.scale = 1.0
