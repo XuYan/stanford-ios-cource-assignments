@@ -45,7 +45,11 @@ class GalleryDetailViewController: UICollectionViewController, UICollectionViewD
                     return
                 }
                 DispatchQueue.main.async {
-                    galleryImageCell.imageView.image = UIImage(data: data)
+                    if let image = UIImage(data: data) {
+                        galleryImageCell.imageView.image = image
+                    } else {
+                        galleryImageCell.imageView.image = UIImage(named: "frowny-face")
+                    }
                 }
             }
         }
