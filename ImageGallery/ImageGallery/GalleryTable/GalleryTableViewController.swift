@@ -12,9 +12,13 @@ class GalleryTableViewController: UITableViewController, UIGestureRecognizerDele
     @IBOutlet weak var tableHeaderLabel: UILabel!
     @IBOutlet weak var addGalleryBtn: UIButton!
     
-    var app = App(currentGalleries: [ Gallery(title: "G1"), Gallery(title: "G2") ], recentlyDeletedGalleries: [])
+    var app = App(currentGalleries: [], recentlyDeletedGalleries: [])
 
+    // MARK: VC life cycle methods
     override func viewDidLoad() {
+        if app.currentGalleries.count == 0 {
+            addNewGallery()
+        }
         select(at: CURRENTTOP)
     }
     
@@ -30,9 +34,9 @@ class GalleryTableViewController: UITableViewController, UIGestureRecognizerDele
         performSegue(withIdentifier: "ShowGallery", sender: nil)
     }
 
-    @IBAction func addNewGallery(_ sender: UIButton) {
+    @IBAction func addNewGallery(_ sender: UIButton? = nil) {
         app.addNewGallery()
-        tableView.reloadData()
+        tableView.reloadSections(IndexSet(integer: CURRENTTOP.section), with: .automatic)
     }
     
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -57,17 +61,30 @@ class GalleryTableViewController: UITableViewController, UIGestureRecognizerDele
     }
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return app.isOperationOnCurrentSection(at: section) ? "Current" : "Recently Deleted"
+        if app.isOperationOnCurrentSection(at: section) {
+            if app.currentGalleries.count > 0 {
+                return "Current"
+            }
+        } else {
+            if app.recentlyDeletedGalleries.count > 0 {
+                return "Recently Deleted"
+            }
+        }
+        return nil
     }
     
+    // MARK: Delete and Undelete
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            let gallery = app.removeGallery(at: indexPath)
-            tableView.deleteRows(at: [indexPath], with: .fade)
-            
-            if app.isOperationOnCurrentSection(at: indexPath) {
-                app.addToRecentlyDeletedGalleries(gallery)
-                tableView.insertRows(at: [DELETETOP], with: .automatic)
+            if !app.isOperationOnCurrentSection(at: indexPath) {
+                _ = app.removeGallery(at: indexPath)
+                tableView.deleteRows(at: [indexPath], with: .fade)
+            } else {
+                tableView.performBatchUpdates({
+                    app.addToRecentlyDeletedGalleries(app.removeGallery(at: indexPath))
+                    tableView.deleteRows(at: [indexPath], with: .fade)
+                    tableView.insertRows(at: [DELETETOP], with: .automatic)
+                })
             }
         }
     }
@@ -78,19 +95,20 @@ class GalleryTableViewController: UITableViewController, UIGestureRecognizerDele
         }
 
         let action = UIContextualAction(style: .normal, title: "undelete") { (action, view, completionHandler) in
-            let gallery = self.app.removeGallery(at: indexPath)
-            tableView.deleteRows(at: [indexPath], with: .fade)
-            
-            self.app.addToCurrentGalleries(gallery)
-            tableView.insertRows(at: [CURRENTTOP], with: .automatic)
-            
-            completionHandler(true)
+            tableView.performBatchUpdates({
+                self.app.addToCurrentGalleries(self.app.removeGallery(at: indexPath))
+                tableView.deleteRows(at: [indexPath], with: .fade)
+                tableView.insertRows(at: [CURRENTTOP], with: .automatic)
+            }) { success in
+                completionHandler(success)
+            }
         }
         
         
         return UISwipeActionsConfiguration(actions: [action])
     }
 
+    // MARK: TappableCell protocol
     func cellSingleTapped() {
         performSegue(withIdentifier: "ShowGallery", sender: nil)
     }
@@ -102,6 +120,7 @@ class GalleryTableViewController: UITableViewController, UIGestureRecognizerDele
         }
     }
     
+    // MARK: segue
     override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
         if identifier == "ShowGallery", let indexPath = tableView.indexPathForSelectedRow {
             return app.isOperationOnCurrentSection(at: indexPath)

@@ -37,7 +37,6 @@ class GalleryDetailViewController: UICollectionViewController, UICollectionViewD
     }
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        print("\(indexPath.item)")
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: imageCellReuseId, for: indexPath)
         if let galleryImageCell = cell as? GalleryImageCell {
             DispatchQueue.global(qos: .userInitiated).async {
