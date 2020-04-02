@@ -78,6 +78,14 @@ class Gallery: Codable {
             return nil
         }
     }
+    
+    func image(at indexPath: IndexPath) -> GalleryImage? {
+        return images[indexPath.item]
+    }
+    
+    func move(from sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
+        images.insert(images.remove(at: sourceIndexPath.item), at: destinationIndexPath.item)
+    }
 
     func url(at indexPath: IndexPath) -> URL {
         return images[indexPath.item].url
