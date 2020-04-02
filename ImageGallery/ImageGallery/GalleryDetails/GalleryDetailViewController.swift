@@ -40,8 +40,11 @@ class GalleryDetailViewController: UICollectionViewController, UICollectionViewD
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: imageCellReuseId, for: indexPath)
         if let galleryImageCell = cell as? GalleryImageCell {
             DispatchQueue.global(qos: .userInitiated).async {
-                guard let data = try? Data(contentsOf: self.gallery.url(at: indexPath)) else {
-                    print("Fail to load image")
+                let url = self.gallery.url(at: indexPath)
+                guard let data = try? Data(contentsOf: url) else {
+                    DispatchQueue.main.async {
+                        self.showAlert(for: url)
+                    }
                     return
                 }
                 DispatchQueue.main.async {
@@ -55,6 +58,15 @@ class GalleryDetailViewController: UICollectionViewController, UICollectionViewD
         }
     
         return cell
+    }
+    
+    private func showAlert(for url: URL) {
+        print("Fail to load image at \(url)")
+        let alertController = UIAlertController(title: "Data fails to load", message:
+            "check your network connectivity", preferredStyle: .alert)
+        alertController.addAction(UIAlertAction(title: "Dismiss", style: .default))
+
+        present(alertController, animated: true)
     }
     
     func collectionView(_ collectionView: UICollectionView, canHandle session: UIDropSession) -> Bool {
